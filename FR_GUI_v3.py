@@ -3288,14 +3288,22 @@ if selected_index == 0:
             new_coords = []
             for j in range(len(Grid[0][0])):
                     for k in range(len(Grid[1])):
+                        dist2 = []
                         for m in range(len(cont_10)):
                             lencont.append(len(cont_10[m]))
                         maxlen = max(lencont)
                         for m in range(len(cont_10)):
                             if lencont[m] == maxlen:
-                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)                    
+                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)
+                            else:
+                                dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False))                                
                         if dist > 0:
-                            new_coords.append([Grid[0][0][j], Grid[1][k][0]])
+                            fail = 0
+                            for l in range(len(dist2)):
+                                if dist2[l] > 0:
+                                    fail = 1
+                            if fail == 0:
+                                new_coords.append([Grid[0][0][j], Grid[1][k][0]])
             
             full_coords.append(new_coords)
         
@@ -3366,14 +3374,22 @@ if selected_index == 0:
             lencont = []
             new_coords2 = []
             for j in range(num_points):
+                dist2 = []
                 for m in range(len(cont_10)):
                     lencont.append(len(cont_10[m]))
                 maxlen = max(lencont)
                 for m in range(len(cont_10)):
                     if lencont[m] == maxlen:
-                        dist = cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False)                
+                        dist = cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False)
+                    else:
+                        dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False))
                 if dist > 0:
-                    new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])])
+                    fail = 0
+                    for l in range(len(dist2)):
+                        if dist2[l] > 0:
+                            fail = 1
+                    if fail == 0:
+                        new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])])                
             
             full_coords2.append(new_coords2)
         
@@ -5145,14 +5161,22 @@ elif selected_index == 1:
             new_coords = []
             for j in range(len(Grid[0][0])):
                     for k in range(len(Grid[1])):
+                        dist2 = []
                         for m in range(len(cont_10)):
                             lencont.append(len(cont_10[m]))
                         maxlen = max(lencont)
                         for m in range(len(cont_10)):
                             if lencont[m] == maxlen:
-                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)                    
+                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)
+                            else:
+                                dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False))                                
                         if dist > 0:
-                            new_coords.append([Grid[0][0][j], Grid[1][k][0]])
+                            fail = 0
+                            for l in range(len(dist2)):
+                                if dist2[l] > 0:
+                                    fail = 1
+                            if fail == 0:
+                                new_coords.append([Grid[0][0][j], Grid[1][k][0]])
             
             full_coords.append(new_coords)
         
@@ -5228,15 +5252,24 @@ elif selected_index == 1:
             
             lencont = []
             new_coords2 = []
+            
             for j in range(num_points):
+                dist2 = []
                 for m in range(len(cont_10)):
                     lencont.append(len(cont_10[m]))
                 maxlen = max(lencont)
                 for m in range(len(cont_10)):
                     if lencont[m] == maxlen:
                         dist = cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False)                
+                    else:
+                        dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False))
                 if dist > 0:
-                    new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])])
+                    fail = 0
+                    for l in range(len(dist2)):
+                        if dist2[l] > 0:
+                            fail = 1
+                    if fail == 0:
+                        new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])]) 
             
             full_coords2.append(new_coords2)
         
@@ -5430,14 +5463,22 @@ elif selected_index == 2:
             new_coords = []
             for j in range(len(Grid[0][0])):
                     for k in range(len(Grid[1])):
+                        dist2 = []
                         for m in range(len(cont_10)):
                             lencont.append(len(cont_10[m]))
                         maxlen = max(lencont)
                         for m in range(len(cont_10)):
                             if lencont[m] == maxlen:
-                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)                    
+                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)
+                            else:
+                                dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False))                                
                         if dist > 0:
-                            new_coords.append([Grid[0][0][j], Grid[1][k][0]])
+                            fail = 0
+                            for l in range(len(dist2)):
+                                if dist2[l] > 0:
+                                    fail = 1
+                            if fail == 0:
+                                new_coords.append([Grid[0][0][j], Grid[1][k][0]])
             
             full_coords.append(new_coords)
         
@@ -5510,14 +5551,22 @@ elif selected_index == 2:
             lencont = []
             new_coords2 = []
             for j in range(num_points):
+                dist2 = []
                 for m in range(len(cont_10)):
                     lencont.append(len(cont_10[m]))
                 maxlen = max(lencont)
                 for m in range(len(cont_10)):
                     if lencont[m] == maxlen:
                         dist = cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False)                
+                    else:
+                        dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False))
                 if dist > 0:
-                    new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])])
+                    fail = 0
+                    for l in range(len(dist2)):
+                        if dist2[l] > 0:
+                            fail = 1
+                    if fail == 0:
+                        new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])]) 
             
             full_coords2.append(new_coords2)
         
@@ -6521,14 +6570,22 @@ elif selected_index == 3:
             new_coords = []
             for j in range(len(Grid[0][0])):
                     for k in range(len(Grid[1])):
+                        dist2 = []
                         for m in range(len(cont_10)):
                             lencont.append(len(cont_10[m]))
                         maxlen = max(lencont)
                         for m in range(len(cont_10)):
                             if lencont[m] == maxlen:
-                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)                    
+                                dist = cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False)
+                            else:
+                                dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([Grid[0][0][j], Grid[1][k][0]]), False))                                
                         if dist > 0:
-                            new_coords.append([Grid[0][0][j], Grid[1][k][0]])
+                            fail = 0
+                            for l in range(len(dist2)):
+                                if dist2[l] > 0:
+                                    fail = 1
+                            if fail == 0:
+                                new_coords.append([Grid[0][0][j], Grid[1][k][0]])
             
             full_coords.append(new_coords)
         
@@ -6601,14 +6658,22 @@ elif selected_index == 3:
             lencont = []
             new_coords2 = []
             for j in range(num_points):
+                dist2 = []
                 for m in range(len(cont_10)):
                     lencont.append(len(cont_10[m]))
                 maxlen = max(lencont)
                 for m in range(len(cont_10)):
                     if lencont[m] == maxlen:
                         dist = cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False)                
+                    else:
+                        dist2.append(cv2.pointPolygonTest(cont_10[m], tuple([float(random_x[n_ind, j]), float(random_y[n_ind, j])]), False))
                 if dist > 0:
-                    new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])])
+                    fail = 0
+                    for l in range(len(dist2)):
+                        if dist2[l] > 0:
+                            fail = 1
+                    if fail == 0:
+                        new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])]) 
             
             full_coords2.append(new_coords2)
         
