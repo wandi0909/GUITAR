@@ -3308,7 +3308,7 @@ if selected_index == 0:
             full_coords.append(new_coords)
         
         grid_lbl = Label(ws, text = 'Grid created!', foreground = 'green')    
-        grid_lbl.place(x = 930, y = 430)
+        grid_lbl.place(x = 930, y = 460)
         
         ws.after(2000, destroy_widget, grid_lbl)
         
@@ -5187,14 +5187,18 @@ elif selected_index == 1:
         
         if c == 0:
             global PhysCoord_btn
+            global base_name7
             PhysCoord_btn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_coords(full_coords, contr, base_name7.get('1.0','end-1c')))
             PhysCoord_btn.place(x = col3_px, y = 430)
             base_name7 = Text(ws, height = 1, width = 30)
             base_name7.place(in_ = PhysCoord_btn, y = 0, relx = spacing)
         else:
             PhysCoord_btn.destroy()
+            base_name7.destroy()
             PhysCoord_btn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_coords(full_coords, contr, base_name7.get('1.0','end-1c')))
             PhysCoord_btn.place(x = col3_px, y = 430)            
+            base_name7 = Text(ws, height = 1, width = 30)
+            base_name7.place(in_ = PhysCoord_btn, y = 0, relx = spacing)
             
         global c11
         c11 = 1
@@ -5280,14 +5284,18 @@ elif selected_index == 1:
         
         if c == 0:
             global PhysCoord_randbtn
+            global base_name10
             PhysCoord_randbtn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_randcoords(full_coords2, contr, base_name10.get('1.0','end-1c')))
             PhysCoord_randbtn.place(x = col3_px, y = 550)
             base_name10 = Text(ws, height = 1, width = 30)
             base_name10.place(in_ = PhysCoord_randbtn, y = 0, relx = spacing)
         else:
             PhysCoord_randbtn.destroy()
+            base_name10.destroy()
             PhysCoord_randbtn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_randcoords(full_coords2, contr, base_name10.get('1.0','end-1c')))
             PhysCoord_randbtn.place(x = col3_px, y = 550)
+            base_name10 = Text(ws, height = 1, width = 30)
+            base_name10.place(in_ = PhysCoord_randbtn, y = 0, relx = spacing)
             
         global c12
         c12 = 1
