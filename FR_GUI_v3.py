@@ -21,11 +21,14 @@ import diplib as dip
 from skimage import measure
 import cv2
 from matplotlib.animation import FuncAnimation
-
+from PIL import ImageTk, Image
+import os
 
 # TO DO: 
+#        add skip button to skip MM gradient and tracking? 
+#        add analyse mode/function
+#        add merge points - mode
 #        add ability to select file type for saving plots (eps, png, pdf, ...)
-#        spherical coords?? - medium high prio
 #        allow oblique twist/extraction planes - medium prio
 #        include stepsize for analysis?? - low prio
 #        show error messages (e.g., when nothing loaded in) - low prio
@@ -34,7 +37,34 @@ from matplotlib.animation import FuncAnimation
 #        visualize sampling - low prio
 
 
-Name = 'Detect_FluxRope'
+Name = 'GUITAR'
+
+### Flashing Logo ###
+
+wslogo = Tk()
+#wslogo.geometry('496x388')
+wslogo.overrideredirect(True)
+logo = ImageTk.PhotoImage(Image.open("GUITAR_LOGO.png"))
+
+screen_width = wslogo.winfo_screenwidth()
+screen_height = wslogo.winfo_screenheight()
+logo_width = 496
+logo_height = 388
+
+x_logo = int((screen_width/2) - (logo_width/2))
+y_logo = int((screen_height/2) - (logo_height/2))
+
+wslogo.geometry("{}x{}+{}+{}".format(logo_width, logo_height, x_logo, y_logo))
+
+
+panel = Label(wslogo, image = logo)
+panel.pack(side = "bottom", fill = "both", expand = "yes")
+
+def destroy_wslogo():
+    wslogo.destroy()
+
+wslogo.after(3000, destroy_wslogo)
+wslogo.mainloop()
 
 ### Window for asking operation mode ###
 
@@ -5805,6 +5835,7 @@ elif selected_index == 3:
         
         if c == 0:
             global spin10
+            global vis7_btn
             spin10 = Spinbox(ws, from_ = 0, to = len(final)-1, textvariable = spin10_val, wrap = True, width = wi)
             spin10.place(x = 20, y = 160)
         
@@ -5812,9 +5843,13 @@ elif selected_index == 3:
             vis7_btn.place(in_ = spin10, y = 0, relx = spacing)
         else:
             spin10.destroy()
+            vis7_btn.destroy()
             spin10 = Spinbox(ws, from_ = 0, to = len(final)-1, textvariable = spin10_val, wrap = True, width = wi)
-            spin10.place(x = 20, y = 160)     
-
+            spin10.place(x = 20, y = 160)   
+            
+            vis7_btn = Button(ws, text = 'Visualize', command = lambda:Vis_diff(contr, Diff, spin10_val.get(), canv_num, c4))
+            vis7_btn.place(in_ = spin10, y = 0, relx = spacing)
+            
         global c3
         c3 = 1
         
