@@ -25,6 +25,7 @@ from PIL import ImageTk, Image
 import os
 
 # TO DO: 
+#        add bbox_inches = tight to all savefig functions!
 #        add skip button to skip MM gradient and tracking? 
 #        add analyse mode/function
 #        add merge points - mode
@@ -821,7 +822,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
             
             #correctly place label to indicate that the plot was indeed saved
             save_lbl = Label(ws, text = 'Saved!', foreground = 'green')    
@@ -3924,10 +3925,10 @@ elif selected_index == 1:
             global Undo_btn
             try:
                 Undo_btn.destroy()
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
             except:
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
                 
         Undo_btn.config(state = "normal")
@@ -4011,10 +4012,10 @@ elif selected_index == 1:
             global Undo_btn
             try:
                 Undo_btn.destroy()
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
             except:
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
                 
         Undo_btn.config(state = "normal")
