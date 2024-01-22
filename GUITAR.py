@@ -337,7 +337,27 @@ if selected_index == 0:
             
             upld = Button(ws, text='Load Files', command = lambda:uploadFiles_vtr(file_path, proxy_str.get(), c3))
             upld.place(in_ = addatbtn, y = 0, relx = spacing)
-    
+            
+            varws = tki.Toplevel(ws)
+            varws.title("Variable Specifications")
+            varws.geometry(str(horsz_plotws)+'x100')
+            varws.grab_set()
+            
+            default_font = tki.font.nametofont("TkDefaultFont")
+            default_font2 = tki.font.nametofont("TkTextFont")
+            default_font3 = tki.font.nametofont("TkFixedFont")
+            default_font.configure(size=9)
+            default_font2.configure(size=9)
+            default_font3.configure(size=9)
+
+            proxy_label = Label(varws, text = 'Insert Proxy:')
+            proxy_label.place(x = 20, y = 10)            
+            proxy_coord = Entry(varws, textvariable = proxy_str, width = 10)
+            proxy_coord.place(in_ = proxy_label, y = 0, relx = spacing)
+            
+            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws2(varws, proxy_str.get()))
+            conf_btn3.place(x = 110, y = 60)
+            
     #confirm button to destroy the selection widget
     conf_btn2 = Button(ws, text='Confirm', command = lambda:TypeDestroy())
     conf_btn2.place(x = 110, y = 95)
