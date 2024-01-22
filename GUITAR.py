@@ -4188,10 +4188,10 @@ elif selected_index == 1:
             global Undo_btn
             try:
                 Undo_btn.destroy()
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
             except:
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
 
         Undo_btn.config(state = "normal")
