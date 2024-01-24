@@ -1,0 +1,4 @@
+scikit-image
+pyvista 
+diplib
+opencv-python
