@@ -45,6 +45,7 @@ Name = 'GUITAR'
 wslogo = Tk()
 #wslogo.geometry('496x388')
 wslogo.overrideredirect(True)
+wslogo.attributes("-topmost", True)
 logo = ImageTk.PhotoImage(Image.open("GUITAR_LOGO.png"))
 
 screen_width = wslogo.winfo_screenwidth()
@@ -56,7 +57,6 @@ x_logo = int((screen_width/2) - (logo_width/2))
 y_logo = int((screen_height/2) - (logo_height/2))
 
 wslogo.geometry("{}x{}+{}+{}".format(logo_width, logo_height, x_logo, y_logo))
-
 
 panel = Label(wslogo, image = logo)
 panel.pack(side = "bottom", fill = "both", expand = "yes")
@@ -70,6 +70,7 @@ wslogo.mainloop()
 ### Window for asking operation mode ###
 
 ws2 = Tk()
+ws2.attributes("-topmost", True)
 
 col2_px = 500
 col3_px = 800
