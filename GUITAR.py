@@ -166,7 +166,7 @@ ws2.mainloop()
 if selected_index == 0:
     ws = Tk()
     ws.title(Name)
-    ws.geometry(str(horsz)+'x670') 
+    ws.geometry(str(horsz)+'x670')
     
     default_font = tki.font.nametofont("TkDefaultFont")
     default_font2 = tki.font.nametofont("TkTextFont")
@@ -259,6 +259,7 @@ if selected_index == 0:
             varws = tki.Toplevel(ws)
             varws.title("Variable Specifications")
             varws.geometry(str(horsz_plotws)+'x200')
+            varws.attributes("-topmost", True)
             varws.grab_set()
             
             default_font = tki.font.nametofont("TkDefaultFont")
@@ -357,7 +358,7 @@ if selected_index == 0:
             
             conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws2(varws, proxy_str.get()))
             conf_btn3.place(x = 110, y = 60)
-            
+    
     #confirm button to destroy the selection widget
     conf_btn2 = Button(ws, text='Confirm', command = lambda:TypeDestroy())
     conf_btn2.place(x = 110, y = 95)
@@ -652,7 +653,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                            
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -669,7 +670,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)  
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
@@ -686,7 +687,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)  
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                 elif Plotstr == 'GrdTw':
                     if contr == 'X': 
                         if boxon8 % 2 == 0:
@@ -704,7 +705,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -721,7 +722,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
@@ -738,7 +739,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                 elif Plotstr == 'track':
                     if contr == 'X': 
                         if boxon8 % 2 == 0:
@@ -756,7 +757,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -773,7 +774,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     if contr == 'Z': 
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
@@ -790,7 +791,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                 elif Plotstr == 'processed':
                     if contr == 'X': 
                         if boxon8 % 2 == 0:
@@ -808,7 +809,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -825,7 +826,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png')
+                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
@@ -1235,21 +1236,24 @@ if selected_index == 0:
             
             lower_lbl = Label(ws, text='Lower SE Size')
             lower_lbl.place(x = col2_px, y = 10)
-            Grd_lower_entry = Entry(ws, textvariable = lower, width = wi)
+            Grd_lower_entry = Entry(ws, textvariable = lower, width = wi-3)
             Grd_lower_entry.place(in_ = lower_lbl, y = 0, relx = spacing)
             upper_lbl = Label(ws, text='Upper SE Size')
-            upper_lbl.place(x = col2_px, y = 40)
-            Grd_upper_entry = Entry(ws, textvariable = upper, width = wi)
+            upper_lbl.place(in_ = Grd_lower_entry, y = 0, relx = spacing)
+            Grd_upper_entry = Entry(ws, textvariable = upper, width = wi-3)
             Grd_upper_entry.place(in_ = upper_lbl, y = 0, relx = spacing)
+            
+            Skip_btn = Button(ws, text = 'Skip MM Gradient', command = lambda:Skip(twist1, c5))
+            Skip_btn.place(x = col2_px, y = 70)
             
             global Grd_button
             Grd_button = Button(ws, text = 'Calculate Grad+Proxy', command = lambda:Calc_grd_twist(lower.get(),upper.get(),twist1, TwistPolarity.get(), c5))
-            Grd_button.place(x = col2_px, y = 70)        
+            Grd_button.place(x = col2_px, y = 40)        
         
         else:
             Grd_button.destroy()
             Grd_button = Button(ws, text = 'Calculate Grad+Proxy', command = lambda:Calc_grd_twist(lower.get(),upper.get(),twist1, TwistPolarity.get(), c5))
-            Grd_button.place(x = col2_px, y = 70)    
+            Grd_button.place(x = col2_px, y = 40)
             
         global c4
         c4 = 1
@@ -1260,6 +1264,37 @@ if selected_index == 0:
             vis_btn2.destroy()
             vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
+    
+    def Skip(arr, c):
+        global Grd
+        Grd = arr.copy()
+        
+        if c == 0:
+            global vis_btn2
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
+            vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing) 
+            
+            Thr_lbl = Label(ws, text = 'Threshold:')
+            Thr_lbl.place(x = col2_px, y = 100)
+            global Enter_thr
+            Enter_thr = Entry(ws, textvariable = Thr, width = wi)
+            Enter_thr.place(in_ = Thr_lbl, y = 0, relx = spacing)
+            global Thresh
+            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), contr2, c7))
+            Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)
+        else:
+            vis_btn2.destroy()
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
+            vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
+            Thresh.destroy()
+            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), contr2, c7))
+            Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)            
+        
+        global c5
+        c5 = 1
+        
+        global contr2
+        contr2 = 0
     
     def saveanim_tw(arr, filename, contr):
         plotws = tki.Toplevel(ws)
@@ -2001,7 +2036,8 @@ if selected_index == 0:
             
     def Thresholding(arr, Thr, contr2, c):
         global GrdTw_Thr
-        GrdTw_Thr = np.zeros(np.shape(arr))
+        GrdTw_Thr = np.zeros(np.shape(arr))        
+        arr = np.array(arr)        
         Thr = float(Thr)
         GrdTw_Thr[arr > Thr] = 1
         
@@ -2321,10 +2357,10 @@ if selected_index == 0:
             global Undo_btn
             try:
                 Undo_btn.destroy()
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:UndoOpen(arr_before, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:UndoOpen(arr_before2, Undo_btn))
                 Undo_btn.place(x = 500, y = 430)
             except:
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:UndoOpen(arr_before, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:UndoOpen(arr_before2, Undo_btn))
                 Undo_btn.place(x = 500, y = 430)
         
         Undo_btn.config(state = "normal")
@@ -3381,7 +3417,7 @@ if selected_index == 0:
                 for k in range(len(full_coords[j])):
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(yy),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(yy[0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Y':
             for j in range(len(full_coords)):
@@ -3389,7 +3425,7 @@ if selected_index == 0:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinY+dy*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(xx),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(xx[0]),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Z':
             for j in range(len(full_coords)):
@@ -3397,7 +3433,7 @@ if selected_index == 0:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinY+dy*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz)))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords)        
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
         coord_lbl.place(x = col3_px, y = 520)
@@ -3467,7 +3503,7 @@ if selected_index == 0:
                 for k in range(len(full_coords[j])):
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy[0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Y':
             for j in range(len(full_coords2)):
@@ -3475,7 +3511,7 @@ if selected_index == 0:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinY+dy*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(xx),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(xx[0]),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Z':
             for j in range(len(full_coords2)):
@@ -3483,7 +3519,7 @@ if selected_index == 0:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinY+dy*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz)))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
