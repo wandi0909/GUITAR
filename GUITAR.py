@@ -380,7 +380,7 @@ if selected_index == 0:
         #invoke window to customize plotting options
         plotws = tki.Toplevel(ws)
         plotws.title("Plot Specifications")
-        plotws.geometry(str(horsz_plotws)+'x640')
+        plotws.geometry(str(horsz_plotws)+'x670')
         plotws.grab_set()
         
         default_font = tki.font.nametofont("TkDefaultFont")
@@ -579,7 +579,7 @@ if selected_index == 0:
         Enter_vmax.place(in_ = vmax_lbl, y = 0, relx = spacing)
         
         Enter_vmin.config(state = "disabled")
-        Enter_vmax.config(state = "disabled")
+        Enter_vmax.config(state = "disabled")        
         
         def set_minmax(boxon):
             if boxon % 2 == 1:
@@ -588,18 +588,27 @@ if selected_index == 0:
             else:
                 Enter_vmin.config(state = "disabled")
                 Enter_vmax.config(state = "disabled")
+                
+        format_lbl = Label(plotws, text = 'Choose Image Format: ')
+        format_lbl.place(x = 10, y = 600)
+
+        formatlist = ["png", "eps", "pdf"]
+        current_format = tki.StringVar()
+        current_format.set(formatlist[0])
+        FormatBox = Combobox(plotws, textvariable = current_format, values = formatlist, state = 'readonly', width = 4)
+        FormatBox.place(in_ = format_lbl, y = 0, relx = spacing)
         
         #confirm button to grab all variables from customization window and to destroy this window
         conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_2(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
         def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
-        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use))
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, current_format.get()))
         
-        conf_btn3.place(x = 120, y = 605)
+        conf_btn3.place(x = 120, y = 635)
         
         #plotting+saving function, which saves the plot and destroys the customization window
         #boxonX are the variables communicating to the plotting function if the customization checkbox was on or off
         def destroy_widget_2(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
-        labelsize, vmin, vmax, cmap_to_use):
+        labelsize, vmin, vmax, cmap_to_use, format_):
 
             L = len(twist)
             
@@ -654,7 +663,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                            
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -671,7 +680,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)  
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
@@ -688,7 +697,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)  
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif Plotstr == 'GrdTw':
                     if contr == 'X': 
                         if boxon8 % 2 == 0:
@@ -706,7 +715,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -723,7 +732,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
@@ -740,7 +749,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif Plotstr == 'track':
                     if contr == 'X': 
                         if boxon8 % 2 == 0:
@@ -758,7 +767,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -775,7 +784,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     if contr == 'Z': 
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
@@ -792,7 +801,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif Plotstr == 'processed':
                     if contr == 'X': 
                         if boxon8 % 2 == 0:
@@ -810,7 +819,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -827,7 +836,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
                             plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
@@ -844,7 +853,7 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.png', bbox_inches = "tight")
+                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
             
             #correctly place label to indicate that the plot was indeed saved
             save_lbl = Label(ws, text = 'Saved!', foreground = 'green')    
@@ -1502,6 +1511,7 @@ if selected_index == 0:
             else:
                 Enter_vmin.config(state = "disabled")
                 Enter_vmax.config(state = "disabled")
+
         
         conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_3(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
         def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
@@ -4069,10 +4079,10 @@ elif selected_index == 1:
             global Undo_btn
             try:
                 Undo_btn.destroy()
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before2, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
             except:
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before2, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
                 
         Undo_btn.config(state = "normal")
@@ -4204,10 +4214,10 @@ elif selected_index == 1:
             global Undo_btn
             try:
                 Undo_btn.destroy()
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er2, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
             except:
-                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er, Undo_btn))
+                Undo_btn = Button(ws, text = 'Undo Processing', command = lambda:Undo(arr_before_er2, Undo_btn))
                 Undo_btn.place(x = 630, y = 400)
 
         Undo_btn.config(state = "normal")      
@@ -4581,7 +4591,7 @@ elif selected_index == 1:
         #add option that it creates a separate folder for the images
         plotws = tki.Toplevel(ws)
         plotws.title("Plot Specifications")
-        plotws.geometry(str(horsz_plotws)+'x640')
+        plotws.geometry(str(horsz_plotws)+'x670')
         plotws.grab_set()
         
         #Set colormap:
@@ -4778,14 +4788,23 @@ elif selected_index == 1:
                 Enter_vmin.config(state = "disabled")
                 Enter_vmax.config(state = "disabled")
         
+        format_lbl = Label(plotws, text = 'Choose Image Format: ')
+        format_lbl.place(x = 10, y = 600)
+
+        formatlist = ["png", "eps", "pdf"]
+        current_format = tki.StringVar()
+        current_format.set(formatlist[0])
+        FormatBox = Combobox(plotws, textvariable = current_format, values = formatlist, state = 'readonly', width = 4)
+        FormatBox.place(in_ = format_lbl, y = 0, relx = spacing)
+        
         conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_2(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
         def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
-        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use))
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, current_format.get()))
         
-        conf_btn3.place(x = 120, y = 605)
+        conf_btn3.place(x = 120, y = 635)
 
         def destroy_widget_2(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
-        labelsize, vmin, vmax, cmap_to_use):
+        labelsize, vmin, vmax, cmap_to_use, format_):
             #add option that it creates a separate folder for the images
             #print(cmap_to_use)
             #if not customized, use default settings:
@@ -4835,7 +4854,7 @@ elif selected_index == 1:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                    fig.savefig(filenames+str(j)+'.png')
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Y': 
                     if boxon8 % 2 == 0:
                         plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -4852,7 +4871,7 @@ elif selected_index == 1:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                    fig.savefig(filenames+str(j)+'.png')
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Z': 
                     if boxon8 % 2 == 0:
                         plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
@@ -4869,7 +4888,7 @@ elif selected_index == 1:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                    fig.savefig(filenames+str(j)+'.png')
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     
             save_lbl = Label(ws, text = 'Saved!', foreground = 'green')
             save_lbl.place(x = saved_px, y = 220)
@@ -5300,7 +5319,7 @@ elif selected_index == 1:
                 for k in range(len(full_coords[j])):
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(yy),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(yy[0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Y':
             for j in range(len(full_coords)):
@@ -5308,7 +5327,7 @@ elif selected_index == 1:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinY+dy*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(xx),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(xx[0]),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Z':
             for j in range(len(full_coords)):
@@ -5316,7 +5335,7 @@ elif selected_index == 1:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinY+dy*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz)))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
@@ -5397,7 +5416,7 @@ elif selected_index == 1:
                 for k in range(len(full_coords[j])):
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy[0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Y':
             for j in range(len(full_coords2)):
@@ -5405,7 +5424,7 @@ elif selected_index == 1:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinY+dy*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(xx),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(xx[0]),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Z':
             for j in range(len(full_coords2)):
@@ -5413,7 +5432,7 @@ elif selected_index == 1:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinY+dy*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz)))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
@@ -5601,7 +5620,7 @@ elif selected_index == 2:
                 for k in range(len(full_coords[j])):
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(yy),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(yy[0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Y':
             for j in range(len(full_coords)):
@@ -5609,7 +5628,7 @@ elif selected_index == 2:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinY+dy*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(xx),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(xx[0]),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Z':
             for j in range(len(full_coords)):
@@ -5617,7 +5636,7 @@ elif selected_index == 2:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinY+dy*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz)))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
@@ -5689,7 +5708,7 @@ elif selected_index == 2:
                 for k in range(len(full_coords[j])):
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy[0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Y':
             for j in range(len(full_coords2)):
@@ -5697,7 +5716,7 @@ elif selected_index == 2:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinY+dy*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(xx),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(xx[0]),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Z':
             for j in range(len(full_coords2)):
@@ -5705,7 +5724,7 @@ elif selected_index == 2:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinY+dy*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz)))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
@@ -5986,7 +6005,7 @@ elif selected_index == 3:
         #invoke window to customize plotting options
         plotws = tki.Toplevel(ws)
         plotws.title("Plot Specifications")
-        plotws.geometry(str(horsz_plotws)+'x640')
+        plotws.geometry(str(horsz_plotws)+'x670')
         plotws.grab_set()
         
         #Set colormap:
@@ -6189,17 +6208,26 @@ elif selected_index == 3:
                 Enter_vmin.config(state = "disabled")
                 Enter_vmax.config(state = "disabled")
         
+        format_lbl = Label(plotws, text = 'Choose Image Format: ')
+        format_lbl.place(x = 10, y = 600)
+
+        formatlist = ["png", "eps", "pdf"]
+        current_format = tki.StringVar()
+        current_format.set(formatlist[0])
+        FormatBox = Combobox(plotws, textvariable = current_format, values = formatlist, state = 'readonly', width = 4)
+        FormatBox.place(in_ = format_lbl, y = 0, relx = spacing)
+        
         #confirm button to grab all variables from customization window and to destroy this window
         conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_2(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
         def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
-        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use))
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, current_format.get()))
         
         conf_btn3.place(x = 120, y = 605)
         
         #plotting+saving function, which saves the plot and destroys the customization window
         #boxonX are the variables communicating to the plotting function if the customization checkbox was on or off
         def destroy_widget_2(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
-        labelsize, vmin, vmax, cmap_to_use):
+        labelsize, vmin, vmax, cmap_to_use, format_):
 
             L = len(Diff)
             
@@ -6252,7 +6280,7 @@ elif selected_index == 3:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                            
                     plot1.tick_params(labelsize = ticksize)
-                    fig.savefig(filenames+str(j)+'.png')
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Y':
                     if boxon8 % 2 == 0:
                         plot1.imshow(Diff[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
@@ -6269,7 +6297,7 @@ elif selected_index == 3:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)  
                     plot1.tick_params(labelsize = ticksize)
-                    fig.savefig(filenames+str(j)+'.png')
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Z':
                     if boxon8 % 2 == 0:
                         plot1.imshow(Diff[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
@@ -6286,7 +6314,7 @@ elif selected_index == 3:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)  
                     plot1.tick_params(labelsize = ticksize)
-                    fig.savefig(filenames+str(j)+'.png')
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                             
             #correctly place label to indicate that the plot was indeed saved
             save_lbl = Label(ws, text = 'Saved!', foreground = 'green')    
@@ -6713,7 +6741,7 @@ elif selected_index == 3:
                 for k in range(len(full_coords[j])):
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(yy),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(yy[0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Y':
             for j in range(len(full_coords)):
@@ -6721,7 +6749,7 @@ elif selected_index == 3:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinY+dy*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinZ+dz*full_coords[j][k][1]
-                    savedcoords.append((float(xx),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
+                    savedcoords.append((float(xx[0]),float(phys_coords[j][k][0]),float(phys_coords[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
         elif contr == 'Z':
             for j in range(len(full_coords)):
@@ -6729,7 +6757,7 @@ elif selected_index == 3:
                 for k in range(len(full_coords[j])):           
                     phys_coords[j][k][0] = MinX+dx*full_coords[j][k][0]
                     phys_coords[j][k][1] = MinY+dy*full_coords[j][k][1]
-                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz)))
+                    savedcoords.append((float(phys_coords[j][k][0]),float(phys_coords[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
@@ -6801,7 +6829,7 @@ elif selected_index == 3:
                 for k in range(len(full_coords[j])):
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(yy[0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Y':
             for j in range(len(full_coords2)):
@@ -6809,7 +6837,7 @@ elif selected_index == 3:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinY+dy*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinZ+dz*full_coords2[j][k][1]
-                    savedcoords2.append((float(xx),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
+                    savedcoords2.append((float(xx[0]),float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
         elif contr == 'Z':
             for j in range(len(full_coords2)):
@@ -6817,7 +6845,7 @@ elif selected_index == 3:
                 for k in range(len(full_coords2[j])):           
                     phys_coords2[j][k][0] = MinX+dx*full_coords2[j][k][0]
                     phys_coords2[j][k][1] = MinY+dy*full_coords2[j][k][1]
-                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz)))
+                    savedcoords2.append((float(phys_coords2[j][k][0]),float(phys_coords2[j][k][1]), float(zz[0])))
                 np.savetxt(name+str(j)+".txt", savedcoords2)
                 
         coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')    
@@ -6826,3 +6854,4 @@ elif selected_index == 3:
     ws.protocol("WM_DELETE_WINDOW", ws.quit)
     ws.mainloop()
     ws.destroy()
+  
