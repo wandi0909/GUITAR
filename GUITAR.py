@@ -1029,7 +1029,7 @@ if selected_index == 0:
             X = Dataset[0].points[:,0]
             Y = Dataset[0].points[:,1]
             Z = Dataset[0].points[:,2]
-            zz = Z[0]
+            zz = [Z[0]]
             MinY = min(Y)
             MaxY = max(Y)
             MY = (max(Y)-min(Y))
@@ -1046,7 +1046,7 @@ if selected_index == 0:
             X = Dataset[0].points[:,0]
             Y = Dataset[0].points[:,1]
             Z = Dataset[0].points[:,2]
-            yy = Y[0]
+            yy = [Y[0]]
             MinZ = min(Z)
             MaxZ = max(Z)
             MZ = (max(Z)-min(Z))
@@ -1064,7 +1064,7 @@ if selected_index == 0:
             X = Dataset[0].points[:,0]
             Y = Dataset[0].points[:,1]
             Z = Dataset[0].points[:,2]
-            xx = X[0]
+            xx = [X[0]]
             MinZ = min(Z)
             MaxZ = max(Z)
             MZ = (max(Z)-min(Z))
@@ -1105,7 +1105,7 @@ if selected_index == 0:
             X = Dataset[0].points[:,0]
             Y = Dataset[0].points[:,1]
             Z = Dataset[0].points[:,2]
-            zz = Z[0]
+            zz = [Z[0]]
             MinY = min(Y)
             MaxY = max(Y)
             MY = (max(Y)-min(Y))
@@ -1123,7 +1123,7 @@ if selected_index == 0:
             X = Dataset[0].points[:,0]
             Y = Dataset[0].points[:,1]
             Z = Dataset[0].points[:,2]
-            yy = Y[0]
+            yy = [Y[0]]
             MinZ = min(Z)
             MaxZ = max(Z)
             MZ = (max(Z)-min(Z))
@@ -1141,7 +1141,7 @@ if selected_index == 0:
             X = Dataset[0].points[:,0]
             Y = Dataset[0].points[:,1]
             Z = Dataset[0].points[:,2]
-            xx = X[0]
+            xx = [X[0]]
             MinZ = min(Z)
             MaxZ = max(Z)
             MZ = (max(Z)-min(Z))
