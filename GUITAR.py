@@ -24,20 +24,6 @@ from matplotlib.animation import FuncAnimation
 from PIL import ImageTk, Image
 import os
 
-# TO DO: 
-#        add bbox_inches = tight to all savefig functions!
-#        add skip button to skip MM gradient and tracking? 
-#        add analyse mode/function
-#        add merge points - mode
-#        add ability to select file type for saving plots (eps, png, pdf, ...)
-#        allow oblique twist/extraction planes - medium prio
-#        include stepsize for analysis?? - low prio
-#        show error messages (e.g., when nothing loaded in) - low prio
-#        allow different shapes for MM algs - low prio
-#        show pre-view of plot customization? - low prio
-#        visualize sampling - low prio
-
-
 Name = 'GUITAR'
 
 ### Flashing Logo ###
