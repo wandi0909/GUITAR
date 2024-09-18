@@ -109,6 +109,11 @@ cmaps = []
 for cmap_id in plt.colormaps():
     cmaps.append(cmap_id)
 
+global contc
+contc = []
+for contc_id in mcolor.CSS4_COLORS.keys():
+    contc.append(contc_id)
+
 global color_val
 color_val = tki.StringVar(value='') #for colormap    
 color_val.set(tuple(cmaps))
@@ -143,7 +148,7 @@ def destroy_varws2(varws, proxy_str):
 
 #confirm-button which destroys the window if a mode has been selected        
 conf_btn = Button(ws2, text='Confirm', command = lambda:destroy_ws2(selected_index))
-conf_btn.place(x = 85, y = 120)
+conf_btn.place(x = 85, y = 150)
 ws2.mainloop()
 
 
@@ -788,76 +793,417 @@ if selected_index == 0:
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
-                elif Plotstr == 'processed':
-                    if contr == 'X': 
-                        if boxon8 % 2 == 0:
-                            plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
-                        else:
-                            plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
-                        if boxon3 % 2 == 0:
-                            plot1.set_title("Tracked Shape, Frame "+str(j), fontsize = titlesize)
-                        else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
-                        if boxon6 % 2 == 0:                            
-                            plot1.set_ylabel("y", fontsize = labelsize)
-                            plot1.set_xlabel("x", fontsize = labelsize)
-                        else: 
-                            plot1.set_ylabel(labely, fontsize = labelsize)
-                            plot1.set_xlabel(labelx, fontsize = labelsize)                             
-                        plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
-                    elif contr == 'Y':
-                        if boxon8 % 2 == 0:
-                            plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
-                        else:
-                            plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
-                        if boxon3 % 2 == 0:
-                            plot1.set_title("Tracked Shape, Frame "+str(j), fontsize = titlesize)
-                        else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
-                        if boxon6 % 2 == 0:                            
-                            plot1.set_ylabel("y", fontsize = labelsize)
-                            plot1.set_xlabel("x", fontsize = labelsize)
-                        else: 
-                            plot1.set_ylabel(labely, fontsize = labelsize)
-                            plot1.set_xlabel(labelx, fontsize = labelsize)                             
-                        plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
-                    elif contr == 'Z':
-                        if boxon8 % 2 == 0:
-                            plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
-                        else:
-                            plot1.imshow(twist[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinY, MaxY])
-                        if boxon3 % 2 == 0:
-                            plot1.set_title("Tracked Shape, Frame "+str(j), fontsize = titlesize)
-                        else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
-                        if boxon6 % 2 == 0:                            
-                            plot1.set_ylabel("y", fontsize = labelsize)
-                            plot1.set_xlabel("x", fontsize = labelsize)
-                        else: 
-                            plot1.set_ylabel(labely, fontsize = labelsize)
-                            plot1.set_xlabel(labelx, fontsize = labelsize)                             
-                        plot1.tick_params(axis='both', which='major', labelsize = ticksize)
-                        fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
             
             #correctly place label to indicate that the plot was indeed saved
             save_lbl = Label(ws, text = 'Saved!', foreground = 'green')    
             if Plotstr == 'Tw':
                 save_lbl.place(x = 420, y = 500)
             elif Plotstr == 'GrdTw':
-                save_lbl.place(x = 420, y = 560)    
-            elif (Plotstr == 'processed'):
-                save_lbl.place(x = saved_px, y = 280)
-            elif (Plotstr == 'Open'):
-                save_lbl.place(x = saved_px, y = 280)
+                save_lbl.place(x = 420, y = 560)
+#            elif (Plotstr == 'processed'):
+#                save_lbl.place(x = saved_px, y = 280)
+#            elif (Plotstr == 'Open'):
+#                save_lbl.place(x = saved_px, y = 280)
             elif (Plotstr == 'track'):
                 save_lbl.place(x = saved_px, y = 280)  
             
             #destroy the "saved" label
             ws.after(2000, destroy_widget, save_lbl)
             plotws.destroy()
+    
+    #function for saving plots with contours
+    def savefunc2(contr, twist, filenames):    
+        #invoke window to customize plotting options
+        plotws = tki.Toplevel(ws)
+        plotws.title("Plot Specifications")
+        plotws.geometry(str(horsz_plotws*2)+'x670')
+        plotws.grab_set()
         
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+        
+        #Set colormap:
+        global cmap_to_use
+        cmap_to_use = "RdBu_r"
+        
+        #enable listbox if customize option is on
+        def set_colormap(boxon):
+            if boxon % 2 == 1:
+                listbox3.config(state = "normal")
+            else:
+                listbox3.config(state = "disabled")
+
+        #customization checkbox
+        def_colormap = tki.IntVar(value = 0)
+        check_default_colormap = Checkbutton(plotws, text = "Customize", variable = def_colormap, command = lambda:set_colormap(def_colormap.get()))        
+        check_default_colormap.place(x = 10, y = 90)
+        
+        listbox3 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+        
+        #listbox for colormaps
+        for j in range(len(cmaps)):
+            listbox3.insert(tki.END, cmaps[j])
+        listbox3.place(x = 120, y = 35)
+        listbox3.config(state = "disabled")
+        
+        colormap_lbl = Label(plotws, text = 'Choose Colormap:')    
+        colormap_lbl.place(x = 120, y = 10)  
+        
+        #get selected colormap
+        def color_selected(event):
+            global cmap_to_use
+            cmap_to_use = cmaps[int(listbox3.curselection()[0])]
+    
+        listbox3.bind('<<ListboxSelect>>', color_selected)       
+        
+        #Set contour color:
+        global contc_to_use
+        contc_to_use = "black"
+        
+        #enable listbox if customize option is on
+        def set_contcolor(boxon):
+            if boxon % 2 == 1:
+                listbox4.config(state = "normal")
+            else:
+                listbox4.config(state = "disabled")
+        
+        #contour checkbox
+        def_contcolor = tki.IntVar(value = 0)
+        check_default_contcolor = Checkbutton(plotws, text = "Customize", variable = def_contcolor, command = lambda:set_contcolor(def_contcolor.get()))        
+        check_default_contcolor.place(in_= listbox3, y = 55, relx = spacing)
+        
+        listbox4 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+
+        #listbox for contour
+        for j in range(len(contc)):
+            listbox4.insert(tki.END, contc[j])
+        listbox4.place(in_ = check_default_contcolor, y = -55, relx = spacing)
+        listbox4.config(state = "disabled")
+        
+        contcolor_lbl = Label(plotws, text = 'Choose Contour Color:')    
+        contcolor_lbl.place(in_ = listbox4, x = 0, y = -30)
+        
+        #get selected colormap
+        def color_selected2(event):
+            global contc_to_use
+            contc_to_use = contc[int(listbox4.curselection()[0])]
+    
+        listbox4.bind('<<ListboxSelect>>', color_selected2)
+
+        #set contour thickness
+        def_contsize = tki.IntVar(value = 0)
+        check_default_contsize = Checkbutton(plotws, text = "Customize", variable = def_contsize, command = lambda:set_contsize(def_contsize.get()))        
+        check_default_contsize.place(in_ = check_default_contcolor, x = 0, y = 90) 
+
+        cont_Label = Label(plotws, text='Choose Contour Thickness:')
+        cont_Label.place(in_ = contcolor_lbl, x = 0, y = 170)       
+        
+        contsize = tki.StringVar(value = "1")
+        Enter_contsize = Entry(plotws, textvariable = contsize, width = 6)
+        Enter_contsize.place(in_ = cont_Label, x = 0, y = 30)
+        Enter_contsize.config(state = "disabled")
+        
+        def set_contsize(boxon):
+            if boxon % 2 == 1:
+                Enter_contsize.config(state = "normal")
+            else:
+                Enter_contsize.config(state = "disabled")
+        
+        #Set figure size checkbox:
+        def_figsize = tki.IntVar(value = 0)
+        check_default_figsize = Checkbutton(plotws, text = "Customize", variable = def_figsize, command = lambda:set_figsize(def_figsize.get()))        
+        check_default_figsize.place(x = 10, y = 180)   
+        
+        Label(plotws, text='Choose Figure Size:').place(x = 120, y = 180)
+        
+        #default figure sizes
+        figure_x = tki.StringVar(value = "12")
+        figure_y = tki.StringVar(value = "12")
+        
+        #entry boxes for figuresizes
+        xfig = Label(plotws, text = 'x =')
+        xfig.place(x = 120, y = 210)
+        Enter_figx = Entry(plotws, textvariable = figure_x, width = 4)
+        Enter_figx.place(in_ = xfig, y = 0, relx = spacing)
+        yfig = Label(plotws, text = 'y =')
+        yfig.place(in_ = Enter_figx, y = 0, relx = spacing)
+        Enter_figy = Entry(plotws, textvariable = figure_y, width = 4)
+        Enter_figy.place(in_ = yfig, y = 0, relx = spacing)
+        
+        Enter_figx.config(state = "disabled")
+        Enter_figy.config(state = "disabled")
+        
+        #enable/disable figure entry boxes
+        def set_figsize(boxon):
+            if boxon % 2 == 1:
+                Enter_figx.config(state = "normal")
+                Enter_figy.config(state = "normal")
+            else:
+                Enter_figx.config(state = "disabled")
+                Enter_figy.config(state = "disabled")
+                
+        #same thing with the plot title:
+        def_title = tki.IntVar(value = 0)
+        check_default_title = Checkbutton(plotws, text = "Customize", variable = def_title, command = lambda:set_plottitle(def_title.get()))        
+        check_default_title.place(x = 10, y = 240)
+        
+        Label(plotws, text='Choose Figure Title:').place(x = 120, y = 240)
+        
+        figure_title = tki.StringVar(value = "")
+        text_title = Text(plotws, height = 1, width = 20)
+        text_title.place(x = 120, y = 270)        
+        text_title.config(state = "disabled")
+        
+        def set_plottitle(boxon):
+            if boxon % 2 == 1:
+                text_title.config(state = "normal")
+            else:
+                text_title.config(state = "disabled")
+        
+        #same thing with the titlesize 
+        def_titlesize = tki.IntVar(value = 0)
+        check_default_titlesize = Checkbutton(plotws, text = "Customize", variable = def_titlesize, command = lambda:set_titlesize(def_titlesize.get()))        
+        check_default_titlesize.place(x = 10, y = 300)   
+        
+        Label(plotws, text='Choose Title Size:').place(x = 120, y = 300)
+        
+        titlesize = tki.StringVar(value = "14")
+        Enter_titlesize = Entry(plotws, textvariable = titlesize, width = 6)
+        Enter_titlesize.place(x = 120, y = 330)       
+        Enter_titlesize.config(state = "disabled")
+        
+        def set_titlesize(boxon):
+            if boxon % 2 == 1:
+                Enter_titlesize.config(state = "normal")
+            else:
+                Enter_titlesize.config(state = "disabled")
+        
+        #Same thing with the ticksizes 
+        def_ticksize = tki.IntVar(value = 0)
+        check_default_ticksize = Checkbutton(plotws, text = "Customize", variable = def_ticksize, command = lambda:set_ticksize(def_ticksize.get()))        
+        check_default_ticksize.place(x = 10, y = 360)   
+        
+        Label(plotws, text='Choose Ticksize:').place(x = 120, y = 360)
+        
+        ticksize = tki.StringVar(value = "14")
+        Enter_ticksize = Entry(plotws, textvariable = ticksize, width = 6)
+        Enter_ticksize.place(x = 120, y = 390)       
+        Enter_ticksize.config(state = "disabled")
+        
+        def set_ticksize(boxon):
+            if boxon % 2 == 1:
+                Enter_ticksize.config(state = "normal")
+            else:
+                Enter_ticksize.config(state = "disabled")
+
+        #Same thing with the axis labels
+        def_label = tki.IntVar(value = 0)
+        check_default_label = Checkbutton(plotws, text = "Customize", variable = def_label, command = lambda:set_label(def_label.get()))        
+        check_default_label.place(x = 10, y = 420)   
+        
+        Label(plotws, text='Choose Labels:').place(x = 120, y = 420)
+        
+        label_x = tki.StringVar(value = "")
+        label_y = tki.StringVar(value = "")
+        
+        axx_lbl = Label(plotws, text = 'x =')
+        axx_lbl.place(x = 120, y = 450)
+        Enter_labelx = Entry(plotws, textvariable = label_x, width = 6)
+        Enter_labelx.place(in_ = axx_lbl, y = 0, relx = spacing)
+        axy_lbl = Label(plotws, text = 'y =')
+        axy_lbl.place(in_ = Enter_labelx, y = 0, relx = spacing)
+        Enter_labely = Entry(plotws, textvariable = label_y, width = 6)
+        Enter_labely.place(in_ = axy_lbl, y = 0, relx = spacing)
+        
+        Enter_labelx.config(state = "disabled")
+        Enter_labely.config(state = "disabled")
+        
+        def set_label(boxon):
+            if boxon % 2 == 1:
+                Enter_labelx.config(state = "normal")
+                Enter_labely.config(state = "normal")
+            else:
+                Enter_labelx.config(state = "disabled")
+                Enter_labely.config(state = "disabled")
+                
+        #same thing with the axis labelsize      
+        def_labelsize = tki.IntVar(value = 0)
+        check_default_labelsize = Checkbutton(plotws, text = "Customize", variable = def_labelsize, command = lambda:set_labelsize(def_labelsize.get()))        
+        check_default_labelsize.place(x = 10, y = 480)   
+        
+        Label(plotws, text='Choose Labelsize:').place(x = 120, y = 480)
+        
+        labelsize = tki.StringVar(value = "14")
+        Enter_labelsize = Entry(plotws, textvariable = labelsize, width = 6)
+        Enter_labelsize.place(x = 120, y = 510)       
+        Enter_labelsize.config(state = "disabled")
+        
+        def set_labelsize(boxon):
+            if boxon % 2 == 1:
+                Enter_labelsize.config(state = "normal")
+            else:
+                Enter_labelsize.config(state = "disabled")
+        
+        #Setting vmin/vmax values for the colormap
+        def_minmax = tki.IntVar(value = 0)
+        check_default_minmax = Checkbutton(plotws, text = "Customize", variable = def_minmax, command = lambda:set_minmax(def_minmax.get()))        
+        check_default_minmax.place(x = 10, y = 540)   
+        
+        Label(plotws, text='Choose Colormap Limits:').place(x = 120, y = 540)
+        
+        vmin = tki.IntVar(value = -5)
+        vmax = tki.IntVar(value = 5)
+        
+        vmin_lbl = Label(plotws, text = 'vmin =')
+        vmin_lbl.place(x = 120, y = 570)
+        Enter_vmin = Entry(plotws, textvariable = vmin, width = 4)
+        Enter_vmin.place(in_ = vmin_lbl, y = 0, relx = spacing)
+        vmax_lbl = Label(plotws, text = 'vmax =')
+        vmax_lbl.place(in_ = Enter_vmin, y = 0, relx = spacing)
+        Enter_vmax = Entry(plotws, textvariable = vmax, width = 4)
+        Enter_vmax.place(in_ = vmax_lbl, y = 0, relx = spacing)
+        
+        Enter_vmin.config(state = "disabled")
+        Enter_vmax.config(state = "disabled")        
+        
+        def set_minmax(boxon):
+            if boxon % 2 == 1:
+                Enter_vmin.config(state = "normal")
+                Enter_vmax.config(state = "normal")
+            else:
+                Enter_vmin.config(state = "disabled")
+                Enter_vmax.config(state = "disabled")
+                
+        format_lbl = Label(plotws, text = 'Choose Image Format: ')
+        format_lbl.place(x = 10, y = 600)
+
+        formatlist = ["png", "eps", "pdf"]
+        current_format = tki.StringVar()
+        current_format.set(formatlist[0])
+        FormatBox = Combobox(plotws, textvariable = current_format, values = formatlist, state = 'readonly', width = 4)
+        FormatBox.place(in_ = format_lbl, y = 0, relx = spacing)
+        
+        #confirm button to grab all variables from customization window and to destroy this window
+        conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_6(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
+        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), def_contcolor.get(), def_contsize.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, current_format.get(), contc_to_use, contsize.get()))
+        
+        conf_btn3.place(x = 120, y = 635)
+        
+        #plotting+saving function, which saves the plot and destroys the customization window
+        #boxonX are the variables communicating to the plotting function if the customization checkbox was on or off
+        def destroy_widget_6(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, boxon9, boxon10, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
+        labelsize, vmin, vmax, cmap_to_use, format_, contc_to_use, contsize):
+
+            L = len(twist)
+            
+            #if not customized, use default values/settings:            
+            if boxon1 % 2 == 0:
+                cmap_to_use = "RdBu_r"
+                
+            if boxon2 % 2 == 0:
+                figx = dim[1]/50
+                figy = dim[0]/50
+            else:
+                figx = int(figx)
+                figy = int(figy)
+            
+            if boxon4 % 2 == 0:
+                titlesize = 14
+            else:
+                titlesize = int(titlesize)
+
+            if boxon5 % 2 == 0:
+                ticksize = 14
+            else:
+                ticksize = int(ticksize)
+
+            if boxon7 % 2 == 0:
+                labelsize = 14
+            else:
+                labelsize = int(labelsize)
+                
+            if boxon10 % 2 == 0:
+                contsize = 1
+            else:
+                contsize = int(contsize)            
+            
+            #plotting and saving the figuresizes
+            
+            #Plotstr controls which array to plot
+            #contr tells which dimensions (for cartesian: x, y, z) to use
+            for j in range(L):
+                fig = Figure(figsize=(figx, figy))
+                plot1 = fig.add_subplot(111)
+                if contr == 'X': 
+                    if boxon8 % 2 == 0:
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+                        plot1.contour(twist[j], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                    else:
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+                        plot1.contour(twist[j], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                    if boxon3 % 2 == 0:
+                        plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
+                    else: 
+                        plot1.set_title(title_name, fontsize = titlesize)
+                    if boxon6 % 2 == 0:                            
+                        plot1.set_ylabel("y", fontsize = labelsize)
+                        plot1.set_xlabel("x", fontsize = labelsize)
+                    else: 
+                        plot1.set_ylabel(labely, fontsize = labelsize)
+                        plot1.set_xlabel(labelx, fontsize = labelsize)                             
+                    plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
+                elif contr == 'Y':
+                    if boxon8 % 2 == 0:
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.contour(twist[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                    else:
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.contour(twist[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                    if boxon3 % 2 == 0:
+                        plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
+                    else: 
+                        plot1.set_title(title_name, fontsize = titlesize)
+                    if boxon6 % 2 == 0:                            
+                        plot1.set_ylabel("y", fontsize = labelsize)
+                        plot1.set_xlabel("x", fontsize = labelsize)
+                    else: 
+                        plot1.set_ylabel(labely, fontsize = labelsize)
+                        plot1.set_xlabel(labelx, fontsize = labelsize)                             
+                    plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
+                elif contr == 'Z':                        
+                    if boxon8 % 2 == 0:
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+                        plot1.contour(twist[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                    else:
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.contour(twist[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                    if boxon3 % 2 == 0:
+                        plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
+                    else: 
+                        plot1.set_title(title_name, fontsize = titlesize)
+                    if boxon6 % 2 == 0:                            
+                        plot1.set_ylabel("y", fontsize = labelsize)
+                        plot1.set_xlabel("x", fontsize = labelsize)
+                    else: 
+                        plot1.set_ylabel(labely, fontsize = labelsize)
+                        plot1.set_xlabel(labelx, fontsize = labelsize)                             
+                    plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
+            
+            #correctly place label to indicate that the plot was indeed saved
+            save_lbl = Label(ws, text = 'Saved!', foreground = 'green')
+            save_lbl.place(x = saved_px, y = 280)
+            
+            #destroy the "saved" label
+            ws.after(2000, destroy_widget, save_lbl)
+            plotws.destroy()
 
     def savearr(arr, filename, Plotstr):
         L = len(arr)
@@ -1216,7 +1562,7 @@ if selected_index == 0:
             TwPol = Label(ws, text='Indicate Polarity:')
             TwPol.place(x = 20, y = 470)
             
-            spinPol = Spinbox(ws, values = (-1, 1), textvariable = TwistPolarity, wrap = True, width = wi)
+            spinPol = Spinbox(ws, values = (-1, 0, 1), textvariable = TwistPolarity, wrap = True, width = wi)
             spinPol.place(in_ = TwPol, y = 0, relx = spacing)
             
             base_name = Text(ws, height = 1, width = 30)
@@ -1921,7 +2267,6 @@ if selected_index == 0:
         
         conf_btn3.place(x = 120, y = 605)
     
-    
         def destroy_widget_4(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
         labelsize, vmin, vmax, cmap_to_use):
 
@@ -2068,19 +2413,25 @@ if selected_index == 0:
         fig3 = plt.figure(figsize = (4.5,3.5))
         plot3 = fig3.add_subplot(111)
         if contr == 'X': 
-            plot3.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot3.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot3.contour(arr[num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black", linewidths = 1)
+            #plot3.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
             plot3.set_title("Gradtwist Threshold "+str(Thr)+" no. "+str(num), fontsize = 8)
             plot3.set_ylabel("y", fontsize = 9)
             plot3.set_xlabel("x", fontsize = 9)
             plot3.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Y': 
-            plot3.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot3.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot3.contour(arr[num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 1)
+            #plot3.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
             plot3.set_title("Gradtwist Threshold "+str(Thr)+" no. "+str(num), fontsize = 8)
             plot3.set_ylabel("y", fontsize = 9)
             plot3.set_xlabel("x", fontsize = 9)
             plot3.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Z': 
-            plot3.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+            plot3.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot3.contour(arr[num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 1)
+            #plot3.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
             plot3.set_title("Gradtwist Threshold "+str(Thr)+" no. "+str(num), fontsize = 8)
             plot3.set_ylabel("y", fontsize = 9)
             plot3.set_xlabel("x", fontsize = 9)
@@ -2446,19 +2797,25 @@ if selected_index == 0:
         fig4 = plt.figure(figsize = (4.5,3.5))
         plot4 = fig4.add_subplot(111)
         if contr == 'X': 
-            plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot4.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot4.contour(arr[num2][num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black", linewidths = 1)
+            #plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
             plot4.set_title("Initial Shape "+str(num2), fontsize = 8)
             plot4.set_ylabel("y", fontsize = 9)
             plot4.set_xlabel("x", fontsize = 9)
             plot4.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Y': 
-            plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot4.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot4.contour(arr[num2][num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 1)
+            #plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
             plot4.set_title("Initial Shape "+str(num2), fontsize = 8)
             plot4.set_ylabel("y", fontsize = 9)
             plot4.set_xlabel("x", fontsize = 9)
             plot4.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Z': 
-            plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+            plot4.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot4.contour(arr[num2][num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 1)
+            #plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
             plot4.set_title("Initial Shape "+str(num2), fontsize = 8)
             plot4.set_ylabel("y", fontsize = 9)
             plot4.set_xlabel("x", fontsize = 9)
@@ -2667,19 +3024,22 @@ if selected_index == 0:
         plot5 = fig5.add_subplot(111)
         Plotstr = 'track'
         if contr == 'X': 
-            plot5.imshow(tracked[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot5.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot5.contour(tracked[num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black", linewidths = 1)
             plot5.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
             plot5.set_ylabel("y", fontsize = 9)
             plot5.set_xlabel("x", fontsize = 9)
             plot5.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Y': 
-            plot5.imshow(tracked[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot5.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot5.contour(tracked[num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 1)
             plot5.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
             plot5.set_ylabel("y", fontsize = 9)
             plot5.set_xlabel("x", fontsize = 9)
             plot5.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Z': 
-            plot5.imshow(tracked[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+            plot5.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot5.contour(tracked[num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 1)
             plot5.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
             plot5.set_ylabel("y", fontsize = 9)
             plot5.set_xlabel("x", fontsize = 9)
@@ -2961,19 +3321,22 @@ if selected_index == 0:
         fig6 = plt.figure(figsize = (4.5,3.5))
         plot6 = fig6.add_subplot(111)
         if contr == 'X': 
-            plot6.imshow(processed[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot6.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot6.contour(processed[num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black", linewidths = 1)
             plot6.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
             plot6.set_ylabel("y", fontsize = 9)
             plot6.set_xlabel("x", fontsize = 9)
             plot6.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Y': 
-            plot6.imshow(processed[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot6.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot6.contour(processed[num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 1)
             plot6.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
             plot6.set_ylabel("y", fontsize = 9)
             plot6.set_xlabel("x", fontsize = 9)
             plot6.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Z': 
-            plot6.imshow(processed[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+            plot6.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot6.contour(processed[num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 1)
             plot6.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
             plot6.set_ylabel("y", fontsize = 9)
             plot6.set_xlabel("x", fontsize = 9)
@@ -2986,7 +3349,7 @@ if selected_index == 0:
         if c == 0:        
             base_name6 = Text(ws, height = 1, width = 30)
             base_name6.place(x = basecol2_px, y = 280)
-            save_frames_processed = Button(ws, text = 'Save Final Frames', command = lambda:savefunc(Plotstr, contr, processed, base_name6.get('1.0','end-1c')))
+            save_frames_processed = Button(ws, text = 'Save Final Frames', command = lambda:savefunc2(contr, processed, base_name6.get('1.0','end-1c')))
             save_frames_processed.place(x = col3_px, y = 280)
             
             base_name8 = Text(ws, height = 1, width = 30)
@@ -3016,7 +3379,7 @@ if selected_index == 0:
 
         plotws = tki.Toplevel(ws)
         plotws.title("Plot Specifications")
-        plotws.geometry(str(horsz_plotws)+'x640')
+        plotws.geometry(str(horsz_plotws*2)+'x640')
         plotws.grab_set()
         
         default_font = tki.font.nametofont("TkDefaultFont")
@@ -3056,6 +3419,60 @@ if selected_index == 0:
             cmap_to_use = cmaps[int(listbox3.curselection()[0])]
     
         listbox3.bind('<<ListboxSelect>>', color_selected)
+        
+        #Set contour color:
+        global contc_to_use
+        contc_to_use = "black"
+        
+        #enable listbox if customize option is on
+        def set_contcolor(boxon):
+            if boxon % 2 == 1:
+                listbox4.config(state = "normal")
+            else:
+                listbox4.config(state = "disabled")
+        
+        #contour checkbox
+        def_contcolor = tki.IntVar(value = 0)
+        check_default_contcolor = Checkbutton(plotws, text = "Customize", variable = def_contcolor, command = lambda:set_contcolor(def_contcolor.get()))        
+        check_default_contcolor.place(in_= listbox3, y = 55, relx = spacing)
+        
+        listbox4 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+
+        #listbox for contour
+        for j in range(len(contc)):
+            listbox4.insert(tki.END, contc[j])
+        listbox4.place(in_ = check_default_contcolor, y = -55, relx = spacing)
+        listbox4.config(state = "disabled")
+        
+        contcolor_lbl = Label(plotws, text = 'Choose Contour Color:')    
+        contcolor_lbl.place(in_ = listbox4, x = 0, y = -30)
+        
+        #get selected colormap
+        def color_selected2(event):
+            global contc_to_use
+            contc_to_use = contc[int(listbox4.curselection()[0])]
+    
+        listbox4.bind('<<ListboxSelect>>', color_selected2)
+
+        #set contour thickness
+        def_contsize = tki.IntVar(value = 0)
+        check_default_contsize = Checkbutton(plotws, text = "Customize", variable = def_contsize, command = lambda:set_contsize(def_contsize.get()))        
+        check_default_contsize.place(in_ = check_default_contcolor, x = 0, y = 90) 
+
+        cont_Label = Label(plotws, text='Choose Contour Thickness:')
+        cont_Label.place(in_ = contcolor_lbl, x = 0, y = 170)       
+        
+        contsize = tki.StringVar(value = "1")
+        Enter_contsize = Entry(plotws, textvariable = contsize, width = 6)
+        Enter_contsize.place(in_ = cont_Label, x = 0, y = 30)
+        Enter_contsize.config(state = "disabled")
+        
+        def set_contsize(boxon):
+            if boxon % 2 == 1:
+                Enter_contsize.config(state = "normal")
+            else:
+                Enter_contsize.config(state = "disabled")
+        
         
         #Set figure size:
         def_figsize = tki.IntVar(value = 0)
@@ -3220,17 +3637,17 @@ if selected_index == 0:
                 Enter_vmax.config(state = "disabled")
         
         conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_5(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
-        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
-        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use))
+        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), def_contcolor.get(), def_contsize.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, contc_to_use, contsize.get()))
         
         conf_btn3.place(x = 120, y = 605)
         
-        def destroy_widget_5(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
-        labelsize, vmin, vmax, cmap_to_use):
+        def destroy_widget_5(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, boxon9, boxon10, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
+        labelsize, vmin, vmax, cmap_to_use, contc_to_use, contsize):
 
             L = len(arr)
             if boxon1 % 2 == 0:
-                cmap_to_use = "gray"
+                cmap_to_use = "RdBu_r"
                 
             if boxon2 % 2 == 0:
                 figx = dim[1]/50
@@ -3255,11 +3672,19 @@ if selected_index == 0:
                 labelsize = int(labelsize)
             
             if boxon8 % 2 == 0:
-                vmin = 0
-                vmax = 1.5
+                vmin = -5
+                vmax = 5
             else:
                 vmin = float(vmin)
                 vmax = float(vmax)
+                
+            if boxon9 % 2 == 0:
+                contc_to_use = "black"
+
+            if boxon10 % 2 == 0:
+                contsize = 1
+            else:
+                contsize = int(contsize)
         
             fig_anim = plt.figure(figsize=(figx, figy))
             if contr == 'X':
@@ -3267,6 +3692,7 @@ if selected_index == 0:
                 nanarray = np.empty((dim[1], dim[0]))
                 nanarray[:] = np.nan
                 im = plt.imshow(nanarray, origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+  
                 if boxon3 % 2 == 0:
                     ax_anim.set_title("Proxy map", fontsize = titlesize)
                 else: 
@@ -3278,6 +3704,21 @@ if selected_index == 0:
                     ax_anim.set_ylabel(labely, fontsize = labelsize)
                     ax_anim.set_xlabel(labelx, fontsize = labelsize) 
                 ax_anim.tick_params(labelsize = ticksize)
+                                                
+                def init():
+                    im.set_data(nanarray)
+                    #plt.axis('off')
+                    return [im]
+            
+                def animate(j):
+                    ax_anim.clear()
+                    ax_anim.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+                    ax_anim.contour(arr[j], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                
+                    #im.set_array(arr[j])
+                    #plt.axis('off')
+                    return [im]
+                    
             elif contr == 'Y': 
                 ax_anim = plt.axes(xlim=(MinY, MaxY), ylim=(MinZ, MaxZ))
                 nanarray = np.empty((dim[1], dim[0]))
@@ -3294,6 +3735,20 @@ if selected_index == 0:
                 else: 
                     ax_anim.set_title(title_name, fontsize = titlesize) 
                 ax_anim.tick_params(labelsize = ticksize)
+                                                
+                def init():
+                    im.set_data(nanarray)
+                    #plt.axis('off')
+                    return [im]
+            
+                def animate(j):
+                    ax_anim.clear()
+                    ax_anim.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                    ax_anim.contour(arr[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                
+                    #im.set_array(arr[j])
+                    #plt.axis('off')
+                    return [im]
             elif contr == 'Z':
                 ax_anim = plt.axes(xlim=(MinX, MaxX), ylim=(MinY, MaxY))
                 nanarray = np.empty((dim[1], dim[0]))
@@ -3309,17 +3764,22 @@ if selected_index == 0:
                     ax_anim.set_title("Proxy map", fontsize = titlesize)
                 else:
                     ax_anim.set_title(title_name, fontsize = titlesize) 
-                ax_anim.tick_params(labelsize = ticksize)
+                ax_anim.tick_params(labelsize = ticksize)               
+                                                
+                def init():
+                    im.set_data(nanarray)
+                    #plt.axis('off')
+                    return [im]
+            
+                def animate(j):
+                    ax_anim.clear()
+                    ax_anim.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinY, MaxY])
+                    ax_anim.contour(arr[j], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = contc_to_use, linewidths = contsize)
                 
-            def init():
-                im.set_data(nanarray)
-                #plt.axis('off')
-                return [im]
-        
-            def animate(j):
-                im.set_array(arr[j])
-                #plt.axis('off')
-                return [im]
+                    #im.set_array(arr[j])
+                    #plt.axis('off')
+                    return [im]
+
         
             anim = FuncAnimation(fig_anim, animate, init_func=init,
                                     frames=L, interval=120, blit=True)
