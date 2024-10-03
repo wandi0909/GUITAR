@@ -22,7 +22,10 @@ from skimage import measure
 import cv2
 from matplotlib.animation import FuncAnimation
 from PIL import ImageTk, Image
+import matplotlib.colors as mcolor
 import os
+import scipy.ndimage as scm
+
 
 Name = 'GUITAR'
 
@@ -76,7 +79,7 @@ else:
     upload_px = 325
     horsz_plotws = 300
 
-ws2.geometry(str(horsz_ws2)+'x175')
+ws2.geometry(str(horsz_ws2)+'x205')
 default_font = tki.font.nametofont("TkDefaultFont")
 default_font2 = tki.font.nametofont("TkTextFont")
 default_font3 = tki.font.nametofont("TkFixedFont")
@@ -90,13 +93,13 @@ Style().configure("TButton", padding=1)
 spacing = 1.05
 wi = 9
 #mode options
-Modes = ('Full Extraction', 'Post-Processing', 'Get Source Points', 'Get Difference Map Points')
+Modes = ('Full Extraction', 'Post-Processing', 'Get Source Points', 'Get Difference Map Points', 'Analyse')
 mode_var = tki.StringVar(value='')
 mode_var.set(Modes)
 
 #mode listbox
 Label(ws2, text="Please indicate the mode you want to use: ").place(x = 20, y = 10)
-listbox1 = tki.Listbox(ws2, listvariable = mode_var, width = 35, height=4, selectmode=tki.SINGLE)
+listbox1 = tki.Listbox(ws2, listvariable = mode_var, width = 35, height=5, selectmode=tki.SINGLE)
 listbox1.place(x = 20, y = 40)
 
 #variable that controls which "main" window to open
@@ -113,6 +116,12 @@ global contc
 contc = []
 for contc_id in mcolor.CSS4_COLORS.keys():
     contc.append(contc_id)
+    
+global plotc
+plotc = contc.copy()
+
+global scatterc
+scatterc = contc.copy()
 
 global color_val
 color_val = tki.StringVar(value='') #for colormap    
@@ -133,7 +142,7 @@ def destroy_ws2(selected_index):
     if selected_index != -1:
         ws2.destroy()
 
-def destroy_varws(varws, x_str, y_str, z_str, proxy_str):
+def destroy_varws(ws, varws, x_str, y_str, z_str, proxy_str):
     testvar = 4
     strings = [x_str, y_str, z_str, proxy_str]
     for j in range(4):
@@ -141,11 +150,13 @@ def destroy_varws(varws, x_str, y_str, z_str, proxy_str):
             testvar -= 1
     if testvar == 4:
         varws.destroy()
+    ws.focus_force()
 
-def destroy_varws2(varws, proxy_str):
+def destroy_varws2(ws, varws, proxy_str):
     if proxy_str != '':
         varws.destroy()
-
+    ws.focus_force()   
+    
 #confirm-button which destroys the window if a mode has been selected        
 conf_btn = Button(ws2, text='Confirm', command = lambda:destroy_ws2(selected_index))
 conf_btn.place(x = 85, y = 150)
@@ -281,7 +292,7 @@ if selected_index == 0:
             proxy_coord = Entry(varws, textvariable = proxy_str, width = 10)
             proxy_coord.place(in_ = proxy_label, y = 0, relx = spacing)
             
-            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws(varws, x_str.get(), y_str.get(), z_str.get(), proxy_str.get()))
+            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws(ws, varws, x_str.get(), y_str.get(), z_str.get(), proxy_str.get()))
             conf_btn3.place(x = 110, y = 150)
 
             upld = Button(ws, text='Load Files', command = lambda:uploadFiles_npz_only(file_path_npz, x_str.get(), y_str.get(), z_str.get(), proxy_str.get(), c1))
@@ -316,7 +327,7 @@ if selected_index == 0:
             proxy_coord = Entry(varws, textvariable = proxy_str, width = 10)
             proxy_coord.place(in_ = proxy_label, y = 0, relx = spacing)
             
-            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws2(varws, proxy_str.get()))
+            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws2(ws, varws, proxy_str.get()))
             conf_btn3.place(x = 110, y = 60)
             
         #read in buttons for vtr
@@ -348,7 +359,7 @@ if selected_index == 0:
             proxy_coord = Entry(varws, textvariable = proxy_str, width = 10)
             proxy_coord.place(in_ = proxy_label, y = 0, relx = spacing)
             
-            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws2(varws, proxy_str.get()))
+            conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws2(ws, varws, proxy_str.get()))
             conf_btn3.place(x = 110, y = 60)
     
     #confirm button to destroy the selection widget
@@ -493,7 +504,7 @@ if selected_index == 0:
         
         ticksize = tki.StringVar(value = "14")
         Enter_ticksize = Entry(plotws, textvariable = ticksize, width = 6)
-        Enter_ticksize.place(x = 120, y = 390)       
+        Enter_ticksize.place(x = 120, y = 390)
         Enter_ticksize.config(state = "disabled")
         
         def set_ticksize(boxon):
@@ -7300,4 +7311,1133 @@ elif selected_index == 3:
     ws.protocol("WM_DELETE_WINDOW", ws.quit)
     ws.mainloop()
     ws.destroy()
+    
+elif selected_index == 4:
+    ws = Tk()
+    ws.title(Name+'<Analyse Mode>')
+    ws.geometry(str(horsz)+'x670') 
+    
+    default_font = tki.font.nametofont("TkDefaultFont")
+    default_font2 = tki.font.nametofont("TkTextFont")
+    default_font3 = tki.font.nametofont("TkFixedFont")
+    default_font.configure(size=9)
+    default_font2.configure(size=9)
+    default_font3.configure(size=9)
+    Style().configure("TButton", padding=1)
+    
+    c1, c2, c3, c4, c5, c6, c7, c8, c9, c10 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    
+    twist1 = []
+    canv_num = 0
+    base_name = ''
+    x_str = tki.StringVar(value = '')
+    y_str = tki.StringVar(value = '')
+    z_str = tki.StringVar(value = '')
+    spin_val = tki.StringVar(value = 0)
+    proxy_str = tki.StringVar(value = '')
+    Plotstr = ''
+     
+    varws = tki.Toplevel(ws)
+    varws.title("Variable Specifications")
+    varws.geometry(str(horsz_plotws)+'x200')
+    varws.grab_set()
+    
+    varws.attributes("-topmost", True)
+    
+    default_font = tki.font.nametofont("TkDefaultFont")
+    default_font2 = tki.font.nametofont("TkTextFont")
+    default_font3 = tki.font.nametofont("TkFixedFont")
+    default_font.configure(size=9)
+    default_font2.configure(size=9)
+    default_font3.configure(size=9)
+    
+    xlabel = Label(varws, text = 'Insert Coordinate 1:')
+    xlabel.place(x = 20, y = 10)            
+    xcoord = Entry(varws, textvariable = x_str, width = 10)
+    xcoord.place(in_ = xlabel, y = 0, relx = spacing)
+    
+    ylabel = Label(varws, text = 'Insert Coordinate 2:')
+    ylabel.place(x = 20, y = 40)            
+    ycoord = Entry(varws, textvariable = y_str, width = 10)
+    ycoord.place(in_ = ylabel, y = 0, relx = spacing)
+    
+    zlabel = Label(varws, text = 'Insert Coordinate 3:')
+    zlabel.place(x = 20, y = 70)            
+    zcoord = Entry(varws, textvariable = z_str, width = 10)
+    zcoord.place(in_ = zlabel, y = 0, relx = spacing)
+    
+    proxy_label = Label(varws, text = 'Insert Parameter:')
+    proxy_label.place(x = 20, y = 100)            
+    proxy_coord = Entry(varws, textvariable = proxy_str, width = 10)
+    proxy_coord.place(in_ = proxy_label, y = 0, relx = spacing)
+    
+    conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws(ws, varws, x_str.get(), y_str.get(), z_str.get(), proxy_str.get()))
+    conf_btn3.place(x = 110, y = 150)
+    
+    addat = Label(ws, text='Load Mask as .npz:')
+    addat.place(x = 20, y = 10)
+            
+    addatbtn = Button(ws, text ='Choose Files', command = lambda:open_file_npz()) 
+    addatbtn.place(in_ = addat, y = 0, relx = spacing)
+
+    upld = Button(ws, text='Load Files', command = lambda:uploadFiles_npz_only(file_path_npz, c1))
+    upld.place(in_ = addatbtn, y = 0, relx = spacing)
+
+    def open_file_npz():
+        global file_path_npz
+        file_path_npz = askopenfilenames(initialdir='./', filetypes=[('NPZ Files', '*npz')])
+        
+    def uploadFiles_npz_only(file_path_npz, c):
+        global Mask
+        Mask = []
+        Test = np.load(file_path_npz[0], allow_pickle = True)
+        for j in range(0, len(Test['data'])):
+            Mask.append(Test['data'][int(j)])
+        
+        global dim, MinX, MaxX, MinY, MaxY, MinZ, MaxZ, dx, dy, dz, contr
+        
+        if (len(Test['x']) > 1) & (len(Test['y']) > 1):
+            global zz
+            zz = Test['z']
+            #print(np.shape(Test['x']))
+            dim = [len(Test['y']), len(Test['x'])]
+            MinX = min(Test['x'])
+            MaxX = max(Test['x'])
+            MX = (MaxX-MinX)
+            dx = MX/(dim[1]-1)
+            MinY = min(Test['y'])
+            MaxY = max(Test['y'])
+            MY = (MaxY-MinY)
+            dy = MY/(dim[0]-1)
+            contr = 'Z'
+            
+        elif (len(Test['x']) > 1):
+            global yy
+            yy = Test['y']
+            #print(np.shape(Test['x']))
+            dim = [len(Test['z']), len(Test['x'])]
+            MinX = min(Test['x'])
+            MaxX = max(Test['x'])
+            MX = (MaxX-MinX)
+            dx = MX/(dim[1]-1)
+            MinZ = min(Test['z'])
+            MaxZ = max(Test['z'])
+            MZ = (MaxZ-MinZ)
+            dz = MZ/(dim[0]-1)
+            contr = 'X'
+            
+        elif (len(Test['y']) > 1):
+            global xx
+            xx = Test['x']
+            dim = [len(Test['z']), len(Test['y'])]
+            MinY = min(Test['y'])
+            MaxY = max(Test['y'])
+            MY = (MaxY-MinY)
+            dy = MY/(dim[1]-1)
+            MinZ = min(Test['z'])
+            MaxZ = max(Test['z'])
+            MZ = (MaxZ-MinZ)
+            dz = MZ/(dim[0]-1)
+            contr = 'Y'
+                
+        Uploadnpz_lbl = Label(ws, text='Files Loaded Successfully!', foreground='green')
+        Uploadnpz_lbl.place(x = 165, y = 40)       
+        ws.after(2000, destroy_widget, Uploadnpz_lbl)
+        
+        if c == 0:
+            addat = Label(ws, text='Load Parameter Maps:')
+            addat.place(x = 20, y = 70)
+    
+            addatbtn = Button(ws, text ='Choose Files', command = lambda:open_file_npz2()) 
+            addatbtn.place(in_ = addat, y = 0, relx = spacing)
+    
+            upld = Button(ws, text='Load Files', command = lambda:uploadFiles_npz_only2(file_path_npz2, x_str.get(), y_str.get(), z_str.get(), proxy_str.get(), c2))
+            upld.place(in_ = addatbtn, y = 0, relx = spacing)
+            
+        global c1 
+        c1 = 1
+
+    def open_file_npz2():
+        global file_path_npz2
+        file_path_npz2 = askopenfilenames(initialdir='./', filetypes=[('NPZ Files', '*npz')])
+        
+    def uploadFiles_npz_only2(file_path_npz2, x_str, y_str, z_str, proxy_str, c):
+        global twist1
+        twist1 = []
+        for j in range(0, len(file_path_npz2)):
+            Test = np.load(file_path_npz2[j], allow_pickle = True)
+            twist1.append(np.transpose(Test[proxy_str]))
+        
+        global dim, MinX, MaxX, MinY, MaxY, MinZ, MaxZ, dx, dy, dz, contr
+        
+        if (len(Test[x_str]) > 1) & (len(Test[y_str]) > 1):
+            global zz
+            zz = Test[z_str]
+            #print(np.shape(Test['x']))
+            dim = [len(Test[y_str]), len(Test[x_str])]
+            MinX = min(Test[x_str])
+            MaxX = max(Test[x_str])
+            MX = (MaxX-MinX)
+            dx = MX/(dim[1]-1)
+            MinY = min(Test[y_str])
+            MaxY = max(Test[y_str])
+            MY = (MaxY-MinY)
+            dy = MY/(dim[0]-1)
+            contr = 'Z'
+        elif (len(Test[x_str]) > 1):
+            global yy
+            yy = Test[y_str]
+            #print(np.shape(Test['x']))
+            dim = [len(Test[z_str]), len(Test[x_str])]
+            MinX = min(Test[x_str])
+            MaxX = max(Test[x_str])
+            MX = (MaxX-MinX)
+            dx = MX/(dim[1]-1)
+            MinZ = min(Test[z_str])
+            MaxZ = max(Test[z_str])
+            MZ = (MaxZ-MinZ)
+            dz = MZ/(dim[0]-1)
+            contr = 'X'            
+        elif (len(Test[y_str]) > 1):
+            global xx
+            xx = Test[x_str]
+            dim = [len(Test[z_str]), len(Test[y_str])]
+            MinY = min(Test[y_str])
+            MaxY = max(Test[y_str])
+            MY = (MaxY-MinY)
+            dy = MY/(dim[1]-1)
+            MinZ = min(Test[z_str])
+            MaxZ = max(Test[z_str])
+            MZ = (MaxZ-MinZ)
+            dz = MZ/(dim[0]-1)
+            contr = 'Y'
+            
+        if np.shape(Mask) == np.shape(twist1):        
+            Uploadnpz_lbl = Label(ws, text='Files Loaded Successfully!', foreground='green')
+            Uploadnpz_lbl.place(x = 165, y = 100)        
+            ws.after(2000, destroy_widget, Uploadnpz_lbl)
+            
+            if c == 0:
+                global Im_lbl
+                Im_lbl = Label(ws, text = 'Choose Image Frame no.:')
+                Im_lbl.place(x = 20, y = 130)
+                global spin
+                spin = Spinbox(ws, from_ = 0, to = len(file_path_npz2)-1, textvariable = spin_val, wrap = True, width = wi)
+                spin.place(in_ = Im_lbl, y = 0, relx = spacing)
+                global vis_btn        
+                vis_btn = Button(ws, text='Visualize Contours', command = lambda:Vis(contr, twist1, Mask, spin_val.get(), canv_num, c3))
+                vis_btn.place(in_ = spin, y = 0, relx = spacing)
+            else: 
+                spin.destroy()
+                spin = Spinbox(ws, from_ = 0, to = len(file_path_npz2)-1, textvariable = spin_val, wrap = True, width = wi)
+                spin.place(in_ = Im_lbl, y = 0, relx = spacing)
+                vis_btn.destroy()      
+                vis_btn = Button(ws, text='Visualize Contours', command = lambda:Vis(contr, twist1, Mask, spin_val.get(), canv_num, c3))
+                vis_btn.place(in_ = spin, y = 0, relx = spacing)
+            
+            global c2
+            c2 = 1
+
+        else:
+            Uploadnpz_lbl = Label(ws, text='File Dimensions Do Not Match!', foreground='red')
+            Uploadnpz_lbl.place(x = 165, y = 100)        
+            ws.after(2000, destroy_widget, Uploadnpz_lbl)
+
+   
+    def Vis(contr, twist, mask, num, num2, c):
+        plt.close()
+        
+        num = int(num)
+        
+        fig = Figure(figsize=(4.5,3.5))
+        plot1 = fig.add_subplot(111)
+        if contr == 'X': 
+            plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot1.contour(mask[num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black")
+            plot1.set_title("Contour map no. "+str(num), fontsize = 9)
+            plot1.set_ylabel("y", fontsize = 9)
+            plot1.set_xlabel("x", fontsize = 9)
+            plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+        elif contr == 'Y': 
+            plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot1.contour(mask[num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 0.5)
+            plot1.set_title("Contour map no. "+str(num), fontsize = 9)
+            plot1.set_ylabel("y", fontsize = 9)
+            plot1.set_xlabel("x", fontsize = 9)
+            plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+        elif contr == 'Z':
+            plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot1.contour(mask[num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 0.5)
+            plot1.set_title("Contour map no. "+str(num), fontsize = 9)
+            plot1.set_ylabel("y", fontsize = 9)
+            plot1.set_xlabel("x", fontsize = 9)
+            plot1.tick_params(axis='both', which='major', labelsize=7) 
+            plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)            
+        
+        if num2 == 0:
+            global canvas
+            canvas = FigureCanvasTkAgg(fig, master=ws)
+            canvas.draw()
+            canvas.get_tk_widget().place(x = 20, y = 160)
+        else:
+            canvas.get_tk_widget().destroy()
+            canvas = FigureCanvasTkAgg(fig, master=ws)
+            canvas.draw()
+            canvas.get_tk_widget().place(x = 20, y = 160)
   
+        global canv_num
+        canv_num = 1
+        
+        if c == 0: 
+            Alabel1 = Label(ws, text = "Enclosed Values (\"Flux\")")
+            Alabel1.place(x = col2_px, y = 10)
+
+            global Calc1
+            Calc1 = Button(ws, text = "Calculate", command = lambda:Enclosed(twist1, Mask, contr, c4))
+            Calc1.place(x = col2_px, y = 40)
+            
+            Alabel2 = Label(ws, text = "Average Enclosed Values")
+            Alabel2.place(x = col2_px, y = 160)
+            
+            global Calc2
+            Calc2 = Button(ws, text = "Calculate", command = lambda:Average(twist1, Mask, c5))
+            Calc2.place(x = col2_px, y = 190) 
+            
+            Alabel3 = Label(ws, text = "Mask Area")
+            Alabel3.place(x = col2_px, y = 310)
+            
+            global Calc3
+            Calc3 = Button(ws, text = "Calculate", command = lambda:Area(Mask, c6))
+            Calc3.place(x = col2_px, y = 340)
+            
+            Alabel4 = Label(ws, text = "Centroid Evolution")
+            Alabel4.place(x = col2_px, y = 460)
+            
+            global Calc4
+            Calc4 = Button(ws, text = "Calculate", command = lambda:Centroid(Mask, contr, c7))
+            Calc4.place(x = col2_px, y = 490)
+            
+            Alabel5 = Label(ws, text = "2D Velocity")
+            Alabel5.place(x = col3_px, y = 10)
+            
+            global Calc5
+            Calc5 = Button(ws, text = "Calculate", command = lambda:Velocity(Mask, contr, c8))
+            Calc5.place(x = col3_px, y = 40)
+            
+            Alabel6 = Label(ws, text = "Min Parameter")
+            Alabel6.place(x = col3_px, y = 160)
+            
+            global Calc6
+            Calc6 = Button(ws, text = "Calculate", command = lambda:MinPar(twist1, Mask, contr, c9))
+            Calc6.place(x = col3_px, y = 190)
+            
+            Alabel7 = Label(ws, text = "Max Parameter")
+            Alabel7.place(x = col3_px, y = 370)
+            
+            global Calc7
+            Calc7 = Button(ws, text = "Calculate", command = lambda:MaxPar(twist1, Mask, contr, c10))
+            Calc7.place(x = col3_px, y = 400)
+            
+        global c3
+        c3 = 1
+        
+    def Enclosed(arr1, arr2, contr, c):
+        N = len(arr1)
+        global Encl
+        
+        if contr == 'X':
+            Encl = np.sum(np.sum(np.array(arr1) * np.array(arr2), axis = 1), axis = 1)*dx*dz
+        elif contr == 'Y':
+            Encl = np.sum(np.sum(np.array(arr1) * np.array(arr2), axis = 1), axis = 1)*dy*dz
+        elif contr == 'Z':
+            Encl = np.sum(np.sum(np.array(arr1) * np.array(arr2), axis = 1), axis = 1)*dy*dx
+            
+        global Plotstr
+        Plotstr = 'Encl'
+        
+        if c == 0:
+            global Plot1
+            Plot1 = Button(ws, text = "Plot", command = lambda:Plot(Encl, canv_num, 'Encl'))
+            Plot1.place(in_ = Calc1, y = 0, relx = spacing)
+            
+            global Save1
+            Save1 = Button(ws, text = "Save Array", command = lambda:Save(Encl, Fname1.get('1.0','end-1c'), 'Encl'))
+            Save1.place(x = col2_px, y = 100)
+            
+            global SavePlot1
+            SavePlot1 = Button(ws, text = "Save Plot", command = lambda:SavePlot(Encl, Fname1.get('1.0','end-1c'), 'Encl'))
+            SavePlot1.place(in_ = Save1, y = 0, relx = spacing)
+            
+            global Fname1
+            Fname1 = Text(ws, height = 1, width = 30)
+            Fname1.place(x = col2_px, y = 70)
+            
+        global c4
+        c4 = 1        
+    
+    def Average(arr1, arr2, c):
+        N = len(arr1)
+        global Avg
+        
+        Avg = np.sum(np.sum(np.array(arr1) * np.array(arr2), axis = 1), axis = 1)/np.sum(np.sum(np.array(arr2), axis = 1), axis = 1)
+    
+        global Plotstr
+        Plotstr = 'Avg'
+        
+        if c == 0:
+            global Plot2
+            Plot2 = Button(ws, text = "Plot", command = lambda:Plot(Avg, canv_num, 'Avg'))
+            Plot2.place(in_ = Calc2, y = 0, relx = spacing)
+            
+            global Save2
+            Save2 = Button(ws, text = "Save Array", command = lambda:Save(Avg, Fname2.get('1.0','end-1c'), 'Avg'))
+            Save2.place(x = col2_px, y = 250)
+            
+            global SavePlot2
+            SavePlot2 = Button(ws, text = "Save Plot", command = lambda:SavePlot(Avg, Fname2.get('1.0','end-1c'), 'Avg'))
+            SavePlot2.place(in_ = Save2, y = 0, relx = spacing)
+            
+            global Fname2
+            Fname2 = Text(ws, height = 1, width = 30)
+            Fname2.place(x = col2_px, y = 220)
+            
+        global c5
+        c5 = 1   
+    
+    def Area(arr, c):
+        N = len(arr)
+        global Ar
+        
+        if contr == 'X':
+            Ar = np.sum(np.sum(np.array(arr), axis = 1), axis = 1)*dx*dz
+        elif contr == 'Y':
+            Ar = np.sum(np.sum(np.array(arr), axis = 1), axis = 1)*dy*dz
+        elif contr == 'Z':
+            Ar = np.sum(np.sum(np.array(arr), axis = 1), axis = 1)*dx*dy
+    
+        global Plotstr
+        Plotstr = 'Area'
+        
+        if c == 0:
+            global Plot3
+            Plot3 = Button(ws, text = "Plot", command = lambda:Plot(Ar, canv_num, 'Area'))
+            Plot3.place(in_ = Calc3, y = 0, relx = spacing)
+            
+            global Save3
+            Save3 = Button(ws, text = "Save Array", command = lambda:Save(Ar, Fname3.get('1.0','end-1c'), 'Area'))
+            Save3.place(x = col2_px, y = 400)
+            
+            global SavePlot3
+            SavePlot3 = Button(ws, text = "Save Plot", command = lambda:SavePlot(Ar, Fname3.get('1.0','end-1c'), 'Area'))
+            SavePlot3.place(in_ = Save3, y = 0, relx = spacing)
+            
+            global Fname3
+            Fname3 = Text(ws, height = 1, width = 30)
+            Fname3.place(x = col2_px, y = 370)
+            
+        global c6
+        c6 = 1
+    
+    def Centroid(Mask, contr, c):
+        Mask = np.array(Mask)
+        Cent = []
+        for j in range(len(Mask)):            
+            Cent.append(scm.center_of_mass(Mask[j]))        
+        
+        global Ccent
+        Ccent = np.zeros((np.shape(Cent)))
+
+        if contr == 'X':
+            for j in range(0, len(Cent)):
+                Ccent[j][0] = MinX + dx*Cent[j][1]
+                Ccent[j][1] = MinZ + dz*Cent[j][0]
+        elif contr == 'Y':
+            for j in range(0, len(Cent)):
+                Ccent[j][0] = MinY + dy*Cent[j][1]
+                Ccent[j][1] = MinZ + dz*Cent[j][0]
+        elif contr == 'Z':
+            for j in range(0, len(Cent)):
+                Ccent[j][0] = MinX + dx*Cent[j][1]
+                Ccent[j][1] = MinY + dy*Cent[j][0]
+        
+        global Plotstr
+        Plotstr = 'Centroid'
+        
+        if c == 0:
+            global Plot4
+            Plot4 = Button(ws, text = "Plot X", command = lambda:Plot(Ccent[:,0], canv_num, 'Centroid'))
+            Plot4.place(in_ = Calc4, y = 0, relx = spacing)
+            
+            global Plot5
+            Plot5 = Button(ws, text = "Plot Y", command = lambda:Plot(Ccent[:,1], canv_num, 'Centroid'))
+            Plot5.place(in_ = Plot4, y = 0, relx = spacing)
+            
+            global Save4
+            Save4 = Button(ws, text = "Save Array", command = lambda:Save(np.array(Ccent), Fname4.get('1.0','end-1c'), 'Centroid'))
+            Save4.place(x = col2_px, y = 550)
+            
+            global SavePlot4
+            SavePlot4 = Button(ws, text = "Save Plot X", command = lambda:SavePlot(Ccent[:,0], Fname4.get('1.0','end-1c'), 'Centroid'))
+            SavePlot4.place(in_ = Save4, y = 0, relx = spacing)
+
+            global SavePlot5
+            SavePlot5 = Button(ws, text = "Save Plot Y", command = lambda:SavePlot(Ccent[:,1], Fname4.get('1.0','end-1c'), 'Centroid'))
+            SavePlot5.place(in_ = SavePlot4, y = 0, relx = spacing)
+            
+            global Fname4
+            Fname4 = Text(ws, height = 1, width = 30)
+            Fname4.place(x = col2_px, y = 520)
+
+            global SaveCoords_btn
+            SaveCoords_btn = Button(ws, text = "Save Coordinates", command = lambda:SaveCoords(Ccent, contr, Fname5.get('1.0','end-1c'), 'Centroid'))
+            SaveCoords_btn.place(x = col2_px, y = 610)
+            
+            global Fname5
+            Fname5 = Text(ws, height = 1, width = 30)
+            Fname5.place(x = col2_px, y = 580)  
+
+        global c7
+        c7 = 1
+
+    def Velocity(Mask, contr, c):
+        Mask = np.array(Mask)
+        Cent = []
+        for j in range(len(Mask)):            
+            Cent.append(scm.center_of_mass(Mask[j]))        
+        
+        global Ccent
+        Ccent = np.zeros((np.shape(Cent)))
+
+        if contr == 'X':
+            for j in range(0, len(Cent)):
+                Ccent[j][0] = MinX + dx*Cent[j][1]
+                Ccent[j][1] = MinZ + dz*Cent[j][0]
+        elif contr == 'Y':
+            for j in range(0, len(Cent)):
+                Ccent[j][0] = MinY + dy*Cent[j][1]
+                Ccent[j][1] = MinZ + dz*Cent[j][0]
+        elif contr == 'Z':
+            for j in range(0, len(Cent)):
+                Ccent[j][0] = MinX + dx*Cent[j][1]
+                Ccent[j][1] = MinY + dy*Cent[j][0]
+        
+        global Vel
+        Vel = np.zeros(len(Ccent))
+        for j in range(len(Vel)):
+            Vel[j] = np.sqrt(Ccent[j,0]**2+Ccent[j,1]**2)
+        
+        global Plotstr
+        Plotstr = 'Velocity'
+            
+        if c == 0:
+            global Plot6
+            Plot6 = Button(ws, text = "Plot", command = lambda:Plot(Vel, canv_num, 'Velocity'))
+            Plot6.place(in_ = Calc5, y = 0, relx = spacing)
+            
+            global Save6
+            Save6 = Button(ws, text = "Save Array", command = lambda:Save(Vel, Fname6.get('1.0','end-1c'), 'Velocity'))
+            Save6.place(x = col3_px, y = 100)
+            
+            global SavePlot6
+            SavePlot6 = Button(ws, text = "Save Plot", command = lambda:SavePlot(Vel, Fname6.get('1.0','end-1c'), 'Velocity'))
+            SavePlot6.place(in_ = Save6, y = 0, relx = spacing)
+            
+            global Fname6
+            Fname6 = Text(ws, height = 1, width = 30)
+            Fname6.place(x = col3_px, y = 70)
+            
+        global c8
+        c8 = 1    
+          
+    def MinPar(arr1, arr2, contr, c):
+        NanMask = np.array(arr2)
+        NanMask[NanMask == 0] = np.nan
+        Masked = NanMask*np.array(arr1)
+        
+        global Minim
+        Minim = []
+        global Minind
+        Minindx = []
+        mint = []
+        
+        for j in range(len(Masked)):
+            Minim.append(np.nanmin(Masked[j]))
+            mint.append(np.nanargmin(Masked[j]))
+            Minindx.append(np.unravel_index(mint[j], np.shape(Masked[j])))
+        
+        Minindx = np.array(Minindx)
+        Minind = np.zeros(np.shape(Minindx))
+        for j in range(len(Minind)):
+            if contr == 'X':
+                Minind[j,0] = MinX + Minindx[j,1]*dx
+                Minind[j,1] = MinZ + Minindx[j,0]*dz
+            elif contr == 'Y':
+                Minind[j,0] = MinY + Minindx[j,1]*dy
+                Minind[j,1] = MinZ + Minindx[j,0]*dz
+            elif contr == 'Z':
+                Minind[j,0] = MinX + Minindx[j,1]*dx
+                Minind[j,1] = MinY + Minindx[j,0]*dy
+        
+        global Plotstr
+        Plotstr = 'MinPar'
+            
+        if c == 0:
+            global Plot7
+            Plot7 = Button(ws, text = "Plot", command = lambda:Plot(Minim, canv_num, 'MinPar'))
+            Plot7.place(in_ = Calc6, y = 0, relx = spacing)
+            
+            global Save7
+            Save7 = Button(ws, text = "Save Array", command = lambda:Save(Minim, Fname7.get('1.0','end-1c'), 'MinPar'))
+            Save7.place(in_ = Plot7, y = 0, relx = spacing)
+            
+            global SavePlot7
+            SavePlot7 = Button(ws, text = "Save Plot", command = lambda:SavePlot(Minim, Fname7.get('1.0','end-1c'), 'MinPar'))
+            SavePlot7.place(in_ = Save7, y = 0, relx = spacing)
+            
+            global Fname7
+            Fname7 = Text(ws, height = 1, width = 30)
+            Fname7.place(x = col3_px, y = 220)
+            
+            global PlotMinCoordsX
+            PlotMinCoordsX = Button(ws, text = "Plot Min X", command = lambda:Plot(Minind[:,0], canv_num, 'MinPar'))
+            PlotMinCoordsX.place(x = col3_px, y = 250)
+
+            global PlotMinCoordsY
+            PlotMinCoordsY = Button(ws, text = "Plot Min Y", command = lambda:Plot(Minind[:,1], canv_num, 'MinPar'))
+            PlotMinCoordsY.place(in_ = PlotMinCoordsX, y = 0, relx = spacing)
+            
+            global Fname8
+            Fname8 = Text(ws, height = 1, width = 30)
+            Fname8.place(x = col3_px, y = 280)
+            
+            global SavePlot8
+            SavePlot8 = Button(ws, text = "Save Plot X", command = lambda:SavePlot(Minind[:,0], Fname7.get('1.0','end-1c'), 'MinPar'))
+            SavePlot8.place(in_ = PlotMinCoordsY, y = 0, relx = spacing)
+
+            global SavePlot9
+            SavePlot9 = Button(ws, text = "Save Plot Y", command = lambda:SavePlot(Minind[:,1], Fname7.get('1.0','end-1c'), 'MinPar'))
+            SavePlot9.place(in_ = SavePlot8, y = 0, relx = spacing)            
+            
+            global SaveCoords_btn2
+            SaveCoords_btn2 = Button(ws, text = "Save Coordinates", command = lambda:SaveCoords(Minind, contr, Fname8.get('1.0','end-1c'), 'MinPar'))
+            SaveCoords_btn2.place(x = col3_px, y = 310)
+        
+        global c9
+        c9 = 1    
+
+    def MaxPar(arr1, arr2, contr, c):
+        NanMask = np.array(arr2)
+        NanMask[NanMask == 0] = np.nan
+        Masked = NanMask*np.array(arr1)
+        
+        global Maxim
+        Maxim = []
+        global Maxind
+        Maxindx = []
+        maxt = []
+        
+        for j in range(len(Masked)):
+            Maxim.append(np.nanmax(Masked[j]))
+            maxt.append(np.nanargmax(Masked[j]))
+            Maxindx.append(np.unravel_index(maxt[j], np.shape(Masked[j])))
+        
+        Maxindx = np.array(Maxindx)
+        Maxind = np.zeros(np.shape(Maxindx))
+        for j in range(len(Maxind)):
+            if contr == 'X':
+                Maxind[j,1] = MinZ + Maxindx[j,0]*dz
+                Maxind[j,0] = MinX + Maxindx[j,1]*dx
+            elif contr == 'Y':
+                Maxind[j,1] = MinZ + Maxindx[j,0]*dz
+                Maxind[j,0] = MinY + Maxindx[j,1]*dy
+            elif contr == 'Z':
+                Maxind[j,1] = MinY + Maxindx[j,0]*dy
+                Maxind[j,0] = MinX + Maxindx[j,1]*dx
+                
+        global Plotstr
+        Plotstr = 'MaxPar'
+            
+        if c == 0:
+            global Plot8
+            Plot8 = Button(ws, text = "Plot", command = lambda:Plot(Maxim, canv_num, 'MaxPar'))
+            Plot8.place(in_ = Calc7, y = 0, relx = spacing)
+            
+            global Save8
+            Save8 = Button(ws, text = "Save Array", command = lambda:Save(Maxim, Fname9.get('1.0','end-1c'), 'MaxPar'))
+            Save8.place(in_ = Plot8, y = 0, relx = spacing)
+            
+            global SavePlot10
+            SavePlot10 = Button(ws, text = "Save Plot", command = lambda:SavePlot(Maxim, Fname9.get('1.0','end-1c'), 'MaxPar'))
+            SavePlot10.place(in_ = Save8, y = 0, relx = spacing)
+            
+            global Fname9
+            Fname9 = Text(ws, height = 1, width = 30)
+            Fname9.place(x = col3_px, y = 430)
+            
+            global PlotMinCoordsX2
+            PlotMinCoordsX2 = Button(ws, text = "Plot Max X", command = lambda:Plot(Maxind[:,0], canv_num, 'MaxPar'))
+            PlotMinCoordsX2.place(x = col3_px, y = 460)
+
+            global PlotMinCoordsY2
+            PlotMinCoordsY2 = Button(ws, text = "Plot Max Y", command = lambda:Plot(Maxind[:,1], canv_num, 'MaxPar'))
+            PlotMinCoordsY2.place(in_ = PlotMinCoordsX2, y = 0, relx = spacing)
+            
+            global Fname10
+            Fname10 = Text(ws, height = 1, width = 30)
+            Fname10.place(x = col3_px, y = 490)
+            
+            global SavePlot11
+            SavePlot11 = Button(ws, text = "Save Plot X", command = lambda:SavePlot(Maxind[:,0], Fname10.get('1.0','end-1c'), 'MaxPar'))
+            SavePlot11.place(in_ = PlotMinCoordsY2, y = 0, relx = spacing)
+
+            global SavePlot12
+            SavePlot12 = Button(ws, text = "Save Plot Y", command = lambda:SavePlot(Maxind[:,1], Fname10.get('1.0','end-1c'), 'MaxPar'))
+            SavePlot12.place(in_ = SavePlot11, y = 0, relx = spacing)            
+            
+            global SaveCoords_btn3
+            SaveCoords_btn3 = Button(ws, text = "Save Coordinates", command = lambda:SaveCoords(Maxind, contr, Fname10.get('1.0','end-1c'), 'MaxPar'))
+            SaveCoords_btn3.place(x = col3_px, y = 520)
+        
+        global c10
+        c10 = 1
+        
+    def Plot(arr, num, Plotstr):
+        plt.close()
+        
+        fig = Figure(figsize=(4.5,3.5))
+        plot1 = fig.add_subplot(111)
+        xlin = np.linspace(0, len(arr)-1, len(arr))
+        plot1.plot(xlin, arr, color = "lightblue", zorder = -1)
+        plot1.scatter(xlin, arr, color = "blue")
+        if Plotstr == 'Encl':
+            plot1.set_title("Enclosed Values", fontsize = 8.5)    
+            plot1.set_ylabel("Flux", fontsize = 8.5)            
+        elif Plotstr == 'Avg':
+            plot1.set_title("Average Values", fontsize = 8.5)
+            plot1.set_ylabel("Average", fontsize = 8.5)            
+        elif Plotstr == 'Area':
+            plot1.set_title("Mask Area", fontsize = 8.5)
+            plot1.set_ylabel("Area", fontsize = 8.5)            
+        elif Plotstr == 'Centroid':
+            plot1.set_title("Centroid Evolution", fontsize = 8.5)
+            plot1.set_ylabel("Coordinate Value", fontsize = 8.5)
+        elif Plotstr == 'Velocity':
+            plot1.set_title("2D Velocity", fontsize = 8.5)
+            plot1.set_ylabel("Velocity", fontsize = 8.5)
+        elif Plotstr == 'MinPar':
+            plot1.set_title("Minimum Parameter Evolution", fontsize = 8.5)
+            plot1.set_ylabel("Min", fontsize = 8.5) 
+        elif Plotstr == 'MaxPar':
+            plot1.set_title("Maximum Parameter Evolution", fontsize = 8.5)
+            plot1.set_ylabel("Max", fontsize = 8.5)             
+        plot1.set_xlabel("Frame No.", fontsize = 8.5)     
+        plot1.tick_params(axis='both', which='major', labelsize=6.5)  
+        
+        if num == 0:
+            global canvas
+            canvas = FigureCanvasTkAgg(fig, master=ws)
+            canvas.draw()
+            canvas.get_tk_widget().place(x = 20, y = 160)
+        else:
+            canvas.get_tk_widget().destroy()
+            canvas = FigureCanvasTkAgg(fig, master=ws)
+            canvas.draw()
+            canvas.get_tk_widget().place(x = 20, y = 160)
+  
+        global canv_num
+        canv_num = 1
+    
+    def Save(arr, fname, Plotstr):
+        np.save(fname+".npy", arr)        
+        save_lbl = Label(ws, text = 'Array Saved!', foreground = 'green')
+        if Plotstr == 'Encl':
+            save_lbl.place(in_ = Save1, x = 0, y = 30)
+        elif Plotstr == 'Avg':
+            save_lbl.place(in_ = Save2, x = 0, y = 30)                
+        elif Plotstr == 'Area':
+            save_lbl.place(in_ = Save3, x = 0, y = 30)
+        elif Plotstr == 'Centroid':
+            save_lbl.place(in_ = Save4, x = 0, y = 90)
+        elif Plotstr == 'Velocity':
+            save_lbl.place(in_ = Save5, x = 0, y = 30)
+        elif Plotstr == 'MinPar':  
+            save_lbl.place(in_ = SaveCoords_btn2, y = 30, x = 0)
+        elif Plotstr == 'MaxPar':  
+            save_lbl.place(in_ = SaveCoords_btn3, y = 30, x = 0)
+        ws.after(2000, destroy_widget, save_lbl)
+    
+    def SavePlot(arr, filenames, Plotstr):    
+        #invoke window to customize plotting options
+        plotws = tki.Toplevel(ws)
+        plotws.title("Plot Specifications")
+        plotws.geometry(str(horsz_plotws*2)+'x670')
+        plotws.grab_set()
+        
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+
+        #Set plot color:
+        global plotc_to_use
+        plotc_to_use = "lightblue"
+        
+        color_lbl = Label(plotws, text = 'Choose Plot Color:')    
+        color_lbl.place(x = 120, y = 10)
+        
+        #enable listbox if customize option is on
+        def set_color(boxon):
+            if boxon % 2 == 1:
+                listbox5.config(state = "normal")
+            else:
+                listbox5.config(state = "disabled")
+        
+        #color checkbox
+        def_color = tki.IntVar(value = 0)
+        check_default_plotcolor = Checkbutton(plotws, text = "Customize", variable = def_color, command = lambda:set_color(def_color.get()))        
+        check_default_plotcolor.place(x = 10, y = 90)
+        
+        listbox5 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+
+        #listbox for contour
+        for j in range(len(plotc)):
+            listbox5.insert(tki.END, plotc[j])
+        listbox5.place(x = 120, y = 35)
+        listbox5.config(state = "disabled")
+
+        def color_selected(event):
+            global plotc_to_use
+            plotc_to_use = plotc[int(listbox5.curselection()[0])]
+    
+        listbox5.bind('<<ListboxSelect>>', color_selected)
+
+        #Set scatter color:
+        global scatterc_to_use
+        scatterc_to_use = "blue"
+        
+        color2_lbl = Label(plotws, text = 'Choose Scatter Color:')    
+        color2_lbl.place(x = 120, y = 170)
+        
+        #enable listbox if customize option is on
+        def set_color2(boxon):
+            if boxon % 2 == 1:
+                listbox6.config(state = "normal")
+            else:
+                listbox6.config(state = "disabled")
+        
+        #color checkbox
+        def_color2 = tki.IntVar(value = 0)
+        check_default_scattercolor = Checkbutton(plotws, text = "Customize", variable = def_color2, command = lambda:set_color2(def_color2.get()))        
+        check_default_scattercolor.place(x = 10, y = 240)
+        
+        listbox6 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+
+        #listbox for scatter
+        for j in range(len(scatterc)):
+            listbox6.insert(tki.END, scatterc[j])
+        listbox6.place(x = 120, y = 185)
+        listbox6.config(state = "disabled")
+
+        def color_selected2(event):
+            global scatterc_to_use
+            scatterc_to_use = scatterc[int(listbox6.curselection()[0])]
+    
+        listbox6.bind('<<ListboxSelect>>', color_selected2)
+
+        #Set figure size checkbox:
+        def_figsize = tki.IntVar(value = 0)
+        check_default_figsize = Checkbutton(plotws, text = "Customize", variable = def_figsize, command = lambda:set_figsize(def_figsize.get()))        
+        check_default_figsize.place(x = 10, y = 320)   
+        
+        Label(plotws, text='Choose Figure Size:').place(x = 120, y = 320)
+        
+        #default figure sizes
+        figure_x = tki.StringVar(value = "12")
+        figure_y = tki.StringVar(value = "12")
+        
+        #entry boxes for figuresizes
+        xfig = Label(plotws, text = 'x =')
+        xfig.place(x = 120, y = 350)
+        Enter_figx = Entry(plotws, textvariable = figure_x, width = 4)
+        Enter_figx.place(in_ = xfig, y = 0, relx = spacing)
+        yfig = Label(plotws, text = 'y =')
+        yfig.place(in_ = Enter_figx, y = 0, relx = spacing)
+        Enter_figy = Entry(plotws, textvariable = figure_y, width = 4)
+        Enter_figy.place(in_ = yfig, y = 0, relx = spacing)
+        
+        Enter_figx.config(state = "disabled")
+        Enter_figy.config(state = "disabled")
+        
+        #enable/disable figure entry boxes
+        def set_figsize(boxon):
+            if boxon % 2 == 1:
+                Enter_figx.config(state = "normal")
+                Enter_figy.config(state = "normal")
+            else:
+                Enter_figx.config(state = "disabled")
+                Enter_figy.config(state = "disabled")
+                
+        #same thing with the plot title:
+        def_title = tki.IntVar(value = 0)
+        check_default_title = Checkbutton(plotws, text = "Customize", variable = def_title, command = lambda:set_plottitle(def_title.get()))        
+        check_default_title.place(x = 10, y = 380)
+        
+        Label(plotws, text='Choose Figure Title:').place(x = 120, y = 380)
+        
+        figure_title = tki.StringVar(value = "")
+        text_title = Text(plotws, height = 1, width = 20)
+        text_title.place(x = 120, y = 410)
+        text_title.config(state = "disabled")
+        
+        def set_plottitle(boxon):
+            if boxon % 2 == 1:
+                text_title.config(state = "normal")
+            else:
+                text_title.config(state = "disabled")
+        
+        #same thing with the titlesize 
+        def_titlesize = tki.IntVar(value = 0)
+        check_default_titlesize = Checkbutton(plotws, text = "Customize", variable = def_titlesize, command = lambda:set_titlesize(def_titlesize.get()))        
+        check_default_titlesize.place(x = 10, y = 440)   
+        
+        Label(plotws, text='Choose Title Size:').place(x = 120, y = 440)
+        titlesize = tki.StringVar(value = "14")
+        Enter_titlesize = Entry(plotws, textvariable = titlesize, width = 6)
+        Enter_titlesize.place(x = 120, y = 470)       
+        Enter_titlesize.config(state = "disabled")
+        
+        def set_titlesize(boxon):
+            if boxon % 2 == 1:
+                Enter_titlesize.config(state = "normal")
+            else:
+                Enter_titlesize.config(state = "disabled")
+        
+        #Same thing with the ticksizes 
+        def_ticksize = tki.IntVar(value = 0)
+        check_default_ticksize = Checkbutton(plotws, text = "Customize", variable = def_ticksize, command = lambda:set_ticksize(def_ticksize.get()))        
+        check_default_ticksize.place(x = 10, y = 500)   
+        
+        Label(plotws, text='Choose Ticksize:').place(x = 120, y = 500)
+        
+        ticksize = tki.StringVar(value = "14")
+        Enter_ticksize = Entry(plotws, textvariable = ticksize, width = 6)
+        Enter_ticksize.place(x = 120, y = 530)       
+        Enter_ticksize.config(state = "disabled")
+        
+        def set_ticksize(boxon):
+            if boxon % 2 == 1:
+                Enter_ticksize.config(state = "normal")
+            else:
+                Enter_ticksize.config(state = "disabled")
+
+        #same thing with the scattersize 
+        def_scattersize = tki.IntVar(value = 0)
+        check_default_scattersize = Checkbutton(plotws, text = "Customize", variable = def_scattersize, command = lambda:set_scattersize(def_scattersize.get()))        
+        check_default_scattersize.place(in_ = listbox5, relx = spacing, y = 0)   
+        
+        Label(plotws, text='Choose Scatter Size:').place(in_ = check_default_scattersize, relx = spacing, y = -30)
+        
+        scattersize = tki.StringVar(value = "40")
+        Enter_scattersize = Entry(plotws, textvariable = scattersize, width = 6)
+        Enter_scattersize.place(in_ = check_default_scattersize, relx = spacing, y = 0)       
+        Enter_scattersize.config(state = "disabled")
+        
+        def set_scattersize(boxon):
+            if boxon % 2 == 1:
+                Enter_scattersize.config(state = "normal")
+            else:
+                Enter_scattersize.config(state = "disabled")
+        
+        #same thing with line thickness 
+        def_linesize = tki.IntVar(value = 0)
+        check_default_linesize = Checkbutton(plotws, text = "Customize", variable = def_linesize, command = lambda:set_linesize(def_linesize.get()))        
+        check_default_linesize.place(in_ = listbox5, relx = spacing, y = 60)   
+        
+        Label(plotws, text='Choose Line Thickness:').place(in_ = check_default_scattersize, relx = spacing, y = 30)
+        linesize = tki.StringVar(value = "2")
+        Enter_linesize = Entry(plotws, textvariable = linesize, width = 6)
+        Enter_linesize.place(in_ = check_default_scattersize, relx = spacing, y = 60)       
+        Enter_linesize.config(state = "disabled")
+        
+        def set_linesize(boxon):
+            if boxon % 2 == 1:
+                Enter_linesize.config(state = "normal")
+            else:
+                Enter_linesize.config(state = "disabled")        
+
+        #Same thing with the axis labels
+        def_label = tki.IntVar(value = 0)
+        check_default_label = Checkbutton(plotws, text = "Customize", variable = def_label, command = lambda:set_label(def_label.get()))        
+        check_default_label.place(in_ = check_default_scattersize, x = 0, y = 90)   
+        
+        Label(plotws, text='Choose Labels:').place(in_ = Enter_linesize, x = 0, y = 30)
+        
+        label_x = tki.StringVar(value = "")
+        label_y = tki.StringVar(value = "")
+        
+        axx_lbl = Label(plotws, text = 'x =')
+        axx_lbl.place(in_ = Enter_linesize, x = 0, y = 60)
+        Enter_labelx = Entry(plotws, textvariable = label_x, width = 6)
+        Enter_labelx.place(in_ = axx_lbl, y = 0, relx = spacing)
+        axy_lbl = Label(plotws, text = 'y =')
+        axy_lbl.place(in_ = Enter_labelx, y = 0, relx = spacing)
+        Enter_labely = Entry(plotws, textvariable = label_y, width = 6)
+        Enter_labely.place(in_ = axy_lbl, y = 0, relx = spacing)
+        
+        Enter_labelx.config(state = "disabled")
+        Enter_labely.config(state = "disabled")
+        
+        def set_label(boxon):
+            if boxon % 2 == 1:
+                Enter_labelx.config(state = "normal")
+                Enter_labely.config(state = "normal")
+            else:
+                Enter_labelx.config(state = "disabled")
+                Enter_labely.config(state = "disabled")
+                
+        #same thing with the axis labelsize      
+        def_labelsize = tki.IntVar(value = 0)
+        check_default_labelsize = Checkbutton(plotws, text = "Customize", variable = def_labelsize, command = lambda:set_labelsize(def_labelsize.get()))
+        check_default_labelsize.place(in_ = check_default_label, x = 0, y = 90)        
+        
+        Label(plotws, text='Choose Labelsize:').place(in_ = axx_lbl, x = 0, y = 30)
+        
+        labelsize = tki.StringVar(value = "14")
+        Enter_labelsize = Entry(plotws, textvariable = labelsize, width = 6)
+        Enter_labelsize.place(in_ = axx_lbl, x = 0, y = 60)       
+        Enter_labelsize.config(state = "disabled")
+        
+        def set_labelsize(boxon):
+            if boxon % 2 == 1:
+                Enter_labelsize.config(state = "normal")
+            else:
+                Enter_labelsize.config(state = "disabled")
+        
+        format_lbl = Label(plotws, text = 'Choose Image Format: ')
+        format_lbl.place(x = 10, y = 560)
+
+        formatlist = ["png", "eps", "pdf"]
+        current_format = tki.StringVar()
+        current_format.set(formatlist[0])
+        FormatBox = Combobox(plotws, textvariable = current_format, values = formatlist, state = 'readonly', width = 4)
+        FormatBox.place(in_ = format_lbl, y = 0, relx = spacing)
+        
+        #confirm button to grab all variables from customization window and to destroy this window
+        conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_2(plotws, def_figsize.get(), def_title.get(), \
+        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_color.get(), def_color2.get(), def_scattersize.get(), def_linesize.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), scattersize.get(), linesize.get(), scatterc_to_use, plotc_to_use, current_format.get()))
+        
+        conf_btn3.place(x = 120, y = 600)
+        
+        #plotting+saving function, which saves the plot and destroys the customization window
+        #boxonX are the variables communicating to the plotting function if the customization checkbox was on or off
+        def destroy_widget_2(widget, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon9, boxon10, boxon11, boxon12, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
+        labelsize, scattersize, linesize, scatterc_to_use, plotc_to_use, format_):
+
+            L = len(arr)
+            xlin = np.linspace(0, len(arr)-1, len(arr))
+            
+            #if not customized, use default values/settings:            
+            
+            if boxon9 % 2 == 0:
+                plotc_to_use = "lightblue"
+
+            if boxon10 % 2 == 0:
+                scatterc_to_use = "blue"
+                               
+            if boxon2 % 2 == 0:
+                figx = 12
+                figy = 12
+            else:
+                figx = int(figx)
+                figy = int(figy)
+            
+            if boxon4 % 2 == 0:
+                titlesize = 14
+            else:
+                titlesize = int(titlesize)
+
+            if boxon5 % 2 == 0:
+                ticksize = 14
+            else:
+                ticksize = int(ticksize)
+
+            if boxon7 % 2 == 0:
+                labelsize = 14
+            else:
+                labelsize = int(labelsize)
+                
+            if boxon11 % 2 == 0:
+                scattersize = 40
+            else:
+                scattersize = int(scattersize)
+
+            if boxon12 % 2 == 0:
+                linesize = 2
+            else:
+                linesize = int(linesize)            
+            
+            #plotting and saving the figure
+            fig = Figure(figsize=(figx, figy))
+            plot1 = fig.add_subplot(111)
+            plot1.plot(xlin, arr, color = plotc_to_use, linewidth = linesize, zorder = -1)
+            plot1.scatter(xlin, arr, color = scatterc_to_use, s = scattersize)
+            plot1.set_title(title_name, fontsize = titlesize)
+            plot1.set_ylabel(labely, fontsize = labelsize)
+            plot1.set_xlabel(labelx, fontsize = labelsize)
+            plot1.tick_params(axis='both', which='major', labelsize=ticksize)
+            fig.savefig(filenames+'.'+ format_, bbox_inches = "tight")
+            
+            save_lbl = Label(ws, text = 'Plot Saved!', foreground = 'green')
+            if Plotstr == 'Encl':
+                save_lbl.place(in_ = Save1, x = 0, y = 30)
+            elif Plotstr == 'Avg':
+                save_lbl.place(in_ = Save2, x = 0, y = 30)                
+            elif Plotstr == 'Area':
+                save_lbl.place(in_ = Save3, x = 0, y = 30)
+            elif Plotstr == 'Centroid':
+                save_lbl.place(in_ = Save4, x = 0, y = 90)
+            elif Plotstr == 'Velocity':
+                save_lbl.place(in_ = Save5, x = 0, y = 30)
+            elif Plotstr == 'MinPar':  
+                save_lbl.place(in_ = SaveCoords_btn2, y = 30, x = 0)
+            elif Plotstr == 'MaxPar':  
+                save_lbl.place(in_ = SaveCoords_btn3, y = 30, x = 0)
+                
+            #destroy the "saved" label
+            ws.after(2000, destroy_widget, save_lbl)
+            plotws.destroy()
+    
+    def SaveCoords(Ccent, contr, name, Plotstr):
+        global savedcoords
+        savedcoords = []
+        if contr == 'X':
+            for j in range(len(Ccent)):
+                savedcoords.append((float(Ccent[j,0]),float(yy[0]),float(Ccent[j,1])))
+            np.savetxt(name+".txt", savedcoords)
+        elif contr == 'Y':
+            for j in range(len(Ccent)):
+                savedcoords.append((float(xx[0]), float(Ccent[j,0]),float(Ccent[j,1])))
+            np.savetxt(name+".txt", savedcoords)
+        elif contr == 'Z':
+            for j in range(len(Ccent)):
+                savedcoords.append((float(Ccent[j,0]),float(Ccent[j,1]), float(zz[0])))
+            np.savetxt(name+".txt", savedcoords)
+
+        coord_lbl = Label(ws, text = 'Coordinates saved!', foreground = 'green')                          
+        if Plotstr == 'Centroid':
+            coord_lbl.place(x = col2_px, y = 640)
+        elif Plotstr == 'MinPar':  
+            coord_lbl.place(in_ = SaveCoords_btn2, y = 30, x = 0)
+        elif Plotstr == 'MaxPar':  
+            coord_lbl.place(in_ = SaveCoords_btn3, y = 30, x = 0)
+            
+        ws.after(2000, destroy_widget, coord_lbl)
+
+    ws.protocol("WM_DELETE_WINDOW", ws.quit)
+    ws.mainloop()
+    ws.destroy()
