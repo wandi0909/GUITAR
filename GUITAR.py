@@ -25,7 +25,7 @@ from PIL import ImageTk, Image
 import matplotlib.colors as mcolor
 import os
 import scipy.ndimage as scm
-
+from matplotlib.ticker import AutoMinorLocator
 
 Name = 'GUITAR'
 
@@ -639,8 +639,7 @@ if selected_index == 0:
                 labelsize = 14
             else:
                 labelsize = int(labelsize)
-            
-            
+                        
             #plotting and saving the figuresizes
             
             #Plotstr controls which array to plot
@@ -665,6 +664,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                            
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
@@ -682,6 +683,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)  
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
@@ -699,6 +702,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)  
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif Plotstr == 'GrdTw':
                     if contr == 'X': 
@@ -717,6 +722,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
@@ -734,6 +741,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Z':
                         if boxon8 % 2 == 0:
@@ -751,6 +760,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif Plotstr == 'track':
                     if contr == 'X': 
@@ -769,6 +780,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     elif contr == 'Y':
                         if boxon8 % 2 == 0:
@@ -786,6 +799,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     if contr == 'Z': 
                         if boxon8 % 2 == 0:
@@ -803,6 +818,8 @@ if selected_index == 0:
                             plot1.set_ylabel(labely, fontsize = labelsize)
                             plot1.set_xlabel(labelx, fontsize = labelsize)                             
                         plot1.tick_params(labelsize = ticksize)
+                        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                         fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
             
             #correctly place label to indicate that the plot was indeed saved
@@ -1168,6 +1185,8 @@ if selected_index == 0:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Y':
                     if boxon8 % 2 == 0:
@@ -1187,6 +1206,8 @@ if selected_index == 0:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Z':                        
                     if boxon8 % 2 == 0:
@@ -1206,6 +1227,8 @@ if selected_index == 0:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
             
             #correctly place label to indicate that the plot was indeed saved
@@ -1539,19 +1562,25 @@ if selected_index == 0:
             plot1.set_ylabel("y", fontsize = 9)
             plot1.set_xlabel("x", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         elif contr == 'Y': 
             plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
             plot1.set_title("Proxy map no. "+str(num), fontsize = 9)
             plot1.set_ylabel("y", fontsize = 9)
             plot1.set_xlabel("x", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         elif contr == 'Z':
             plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
             plot1.set_title("Proxy map no. "+str(num), fontsize = 9)
             plot1.set_ylabel("y", fontsize = 9)
             plot1.set_xlabel("x", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)        
-        
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
+            
         if num2 == 0:
             global canvas
             canvas = FigureCanvasTkAgg(fig, master=ws)
@@ -5311,6 +5340,8 @@ elif selected_index == 1:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Y': 
                     if boxon8 % 2 == 0:
@@ -5328,6 +5359,8 @@ elif selected_index == 1:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Z': 
                     if boxon8 % 2 == 0:
@@ -5345,6 +5378,8 @@ elif selected_index == 1:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                             
                     plot1.tick_params(axis='both', which='major', labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                     
             save_lbl = Label(ws, text = 'Saved!', foreground = 'green')
@@ -6399,18 +6434,24 @@ elif selected_index == 3:
             plot1.set_ylabel("Z", fontsize = 9)
             plot1.set_xlabel("X", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         elif contr == 'Y': 
             plot1.imshow(twist[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
             plot1.set_title("Difference Map no. "+str(num), fontsize = 9)
             plot1.set_ylabel("Z", fontsize = 9)
             plot1.set_xlabel("Y", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         elif contr == 'Z':
             plot1.imshow(twist[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
             plot1.set_title("Difference Map no. "+str(num), fontsize = 9)
             plot1.set_ylabel("Y", fontsize = 9)
             plot1.set_xlabel("X", fontsize = 9)
-            plot1.tick_params(axis='both', which='major', labelsize=7)            
+            plot1.tick_params(axis='both', which='major', labelsize=7)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))            
         
         if num2 == 0:
             global canvas
@@ -6737,6 +6778,8 @@ elif selected_index == 3:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)                            
                     plot1.tick_params(labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Y':
                     if boxon8 % 2 == 0:
@@ -6754,6 +6797,8 @@ elif selected_index == 3:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)  
                     plot1.tick_params(labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                 elif contr == 'Z':
                     if boxon8 % 2 == 0:
@@ -6771,6 +6816,8 @@ elif selected_index == 3:
                         plot1.set_ylabel(labely, fontsize = labelsize)
                         plot1.set_xlabel(labelx, fontsize = labelsize)  
                     plot1.tick_params(labelsize = ticksize)
+                    plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+                    plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
                             
             #correctly place label to indicate that the plot was indeed saved
@@ -7559,6 +7606,8 @@ elif selected_index == 4:
             plot1.set_xlabel("x", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)
             plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         elif contr == 'Y': 
             plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
             plot1.contour(mask[num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 0.5)
@@ -7567,6 +7616,8 @@ elif selected_index == 4:
             plot1.set_xlabel("x", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7)
             plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         elif contr == 'Z':
             plot1.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
             plot1.contour(mask[num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 0.5)
@@ -7574,7 +7625,9 @@ elif selected_index == 4:
             plot1.set_ylabel("y", fontsize = 9)
             plot1.set_xlabel("x", fontsize = 9)
             plot1.tick_params(axis='both', which='major', labelsize=7) 
-            plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)            
+            plot1.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))            
         
         if num2 == 0:
             global canvas
@@ -8033,7 +8086,9 @@ elif selected_index == 4:
             plot1.set_title("Maximum Parameter Evolution", fontsize = 8.5)
             plot1.set_ylabel("Max", fontsize = 8.5)             
         plot1.set_xlabel("Frame No.", fontsize = 8.5)     
-        plot1.tick_params(axis='both', which='major', labelsize=6.5)  
+        plot1.tick_params(axis='both', which='major', labelsize=6.5)
+        plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+        plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
         
         if num == 0:
             global canvas
@@ -8390,6 +8445,8 @@ elif selected_index == 4:
             plot1.set_ylabel(labely, fontsize = labelsize)
             plot1.set_xlabel(labelx, fontsize = labelsize)
             plot1.tick_params(axis='both', which='major', labelsize=ticksize)
+            plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
             fig.savefig(filenames+'.'+ format_, bbox_inches = "tight")
             
             save_lbl = Label(ws, text = 'Plot Saved!', foreground = 'green')
