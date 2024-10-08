@@ -656,7 +656,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Proxy map no. "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -675,7 +675,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Proxy map no. "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -694,7 +694,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Proxy map no. "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -714,7 +714,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Gradient+Twist no. "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:                        
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -733,7 +733,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Gradient+Twist no. "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:                            
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -752,7 +752,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Gradient+Twist no. "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:                            
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -772,7 +772,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Tracked Shape, Frame "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:                            
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -791,7 +791,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Tracked Shape, Frame "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:                            
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -810,7 +810,7 @@ if selected_index == 0:
                         if boxon3 % 2 == 0:
                             plot1.set_title("Tracked Shape, Frame "+str(j), fontsize = titlesize)
                         else: 
-                            plot1.set_title(title_name, fontsize = titlesize)
+                            plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                         if boxon6 % 2 == 0:                            
                             plot1.set_ylabel("y", fontsize = labelsize)
                             plot1.set_xlabel("x", fontsize = labelsize)
@@ -1177,7 +1177,7 @@ if selected_index == 0:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
                         plot1.set_ylabel("y", fontsize = labelsize)
                         plot1.set_xlabel("x", fontsize = labelsize)
@@ -1198,7 +1198,7 @@ if selected_index == 0:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
                         plot1.set_ylabel("y", fontsize = labelsize)
                         plot1.set_xlabel("x", fontsize = labelsize)
@@ -1219,7 +1219,7 @@ if selected_index == 0:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
                         plot1.set_ylabel("y", fontsize = labelsize)
                         plot1.set_xlabel("x", fontsize = labelsize)
@@ -5332,7 +5332,7 @@ elif selected_index == 1:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Processed Shape, Frame "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
                         plot1.set_ylabel("y", fontsize = labelsize)
                         plot1.set_xlabel("x", fontsize = labelsize)
@@ -5351,7 +5351,7 @@ elif selected_index == 1:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Processed Shape, Frame "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
                         plot1.set_ylabel("y", fontsize = labelsize)
                         plot1.set_xlabel("x", fontsize = labelsize)
@@ -5370,7 +5370,7 @@ elif selected_index == 1:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Processed Shape, Frame "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
                         plot1.set_ylabel("y", fontsize = labelsize)
                         plot1.set_xlabel("x", fontsize = labelsize)
@@ -6770,7 +6770,7 @@ elif selected_index == 3:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Difference Map no. "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:
                         plot1.set_ylabel("Z", fontsize = labelsize)
                         plot1.set_xlabel("X", fontsize = labelsize)
@@ -6789,7 +6789,7 @@ elif selected_index == 3:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Difference Map no. "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:
                         plot1.set_ylabel("Z", fontsize = labelsize)
                         plot1.set_xlabel("Y", fontsize = labelsize)
@@ -6808,7 +6808,7 @@ elif selected_index == 3:
                     if boxon3 % 2 == 0:
                         plot1.set_title("Difference Map no. "+str(j), fontsize = titlesize)
                     else: 
-                        plot1.set_title(title_name, fontsize = titlesize)
+                        plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:
                         plot1.set_ylabel("Y", fontsize = labelsize)
                         plot1.set_xlabel("X", fontsize = labelsize)
