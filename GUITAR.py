@@ -1662,16 +1662,22 @@ if selected_index == 0:
             Enter_thr = Entry(ws, textvariable = Thr, width = wi)
             Enter_thr.place(in_ = Thr_lbl, y = 0, relx = spacing)
             global Thresh
-            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), contr2, c7))
+            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
             Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)
+            global InvThresh
+            InvThresh = Button(ws, text = 'Invert Threshold', command = lambda:InvertThresh(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
+            InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
             vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
-            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), contr2, c7))
-            Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)            
-        
+            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
+            Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)
+            InvThresh.destroy()
+            InvThresh = Button(ws, text = 'Invert Threshold', command = lambda:InvertThresh(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
+            InvThresh.place(x = col2_px, y = 130)
+            
         global c5
         c5 = 1
         
@@ -2035,16 +2041,22 @@ if selected_index == 0:
             Enter_thr = Entry(ws, textvariable = Thr, width = wi)
             Enter_thr.place(in_ = Thr_lbl, y = 0, relx = spacing)
             global Thresh
-            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), contr2, c7))
+            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
             Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)
+            global InvThresh
+            InvThresh = Button(ws, text = 'Invert Threshold', command = lambda:InvertThresh(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
+            InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
             vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
-            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), contr2, c7))
+            Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
             Thresh.place(in_ = Enter_thr, y = 0, relx = spacing)            
-        
+            InvThresh.destroy()
+            InvThresh = Button(ws, text = 'Invert Threshold', command = lambda:InvertThresh(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
+            InvThresh.place(x = col2_px, y = 130)
+            
         global c5
         c5 = 1
         
@@ -2416,13 +2428,18 @@ if selected_index == 0:
             ws.after(2000, destroy_widget, save_lbl)
             plotws.destroy()
             
-    def Thresholding(arr, Thr, contr2, c):
+    def Thresholding(arr, Thr, twistpol, contr2, c):
         global GrdTw_Thr
         GrdTw_Thr = np.zeros(np.shape(arr))        
         arr = np.array(arr)        
         Thr = float(Thr)
-        GrdTw_Thr[arr > Thr] = 1
-        
+        if twistpol == "1":
+            GrdTw_Thr[arr > Thr] = 1
+        elif twistpol == "-1":
+            GrdTw_Thr[arr < Thr] = 1        
+        elif twistpol == "0":
+            GrdTw_Thr[np.abs(arr) > Thr] = 1
+            
         if contr2 == 0:
             pass
         elif contr2 == 1:
@@ -2436,15 +2453,43 @@ if selected_index == 0:
 
         if c == 0:
             vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, c8))
-            vis3_btn.place(x = col2_px, y = 130)      
-        #else:
-            #spin3.destroy()
-            #spin3 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin3_val, wrap = True)
-            #spin3.place(x = 580, y = 160)
+            vis3_btn.place(in_ = InvThresh, y = 0, relx = spacing)      
     
         contr2 = 0
         global contr3
         contr3 = 0
+
+    def InvertThresh(arr, Thr, twistpol, contr2, c):
+        global GrdTw_Thr
+        GrdTw_Thr = np.zeros(np.shape(arr))        
+        arr = np.array(arr)        
+        Thr = float(Thr)
+        if twistpol == "1":
+            GrdTw_Thr[(arr < Thr) & (arr > 0)] = 1
+        elif twistpol == "-1":
+            GrdTw_Thr[(arr > Thr) & (arr < 0)] = 1
+        elif twistpol == "0":
+            GrdTw_Thr[np.abs(arr) < Thr] = 1
+            
+        if contr2 == 0:
+            pass
+        elif contr2 == 1:
+            calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
+            calc_lbl.place(x = 720, y = 370)
+            ws.after(2000, destroy_widget, calc_lbl) 
+        elif contr2 == 2:
+            calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
+            calc_lbl.place(x = 720, y = 400)   
+            ws.after(2000, destroy_widget, calc_lbl)    
+
+        if c == 0:
+            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, c8))
+            vis3_btn.place(in_ = InvThresh, y = 0, relx = spacing)      
+    
+        contr2 = 0
+        global contr3
+        contr3 = 0
+
         
     def Vis_Thresholding(contr, arr, num, Thr, canvas, c):
         plt.close()
