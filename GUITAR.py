@@ -15,7 +15,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 import matplotlib
 matplotlib.use('TkAgg')
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+from matplotlib.backends.backend_tkagg import (FigureCanvasTkAgg, NavigationToolbar2Tk)
 import pyvista as pv
 import diplib as dip
 from skimage import measure
@@ -1554,6 +1554,7 @@ if selected_index == 0:
         #fig = plt.figure()
         num = int(num)
         
+        global fig
         fig = Figure(figsize=(4.5,3.5))
         plot1 = fig.add_subplot(111)
         if contr == 'X': 
@@ -1602,6 +1603,7 @@ if selected_index == 0:
             TwPol = Label(ws, text='Indicate Polarity:')
             TwPol.place(x = 20, y = 470)
             
+            global spinPol
             spinPol = Spinbox(ws, values = (-1, 0, 1), textvariable = TwistPolarity, wrap = True, width = wi)
             spinPol.place(in_ = TwPol, y = 0, relx = spacing)
             
@@ -1630,12 +1632,20 @@ if selected_index == 0:
             
             global Grd_button
             Grd_button = Button(ws, text = 'Calculate Grad+Proxy', command = lambda:Calc_grd_twist(lower.get(),upper.get(),twist1, TwistPolarity.get(), c5))
-            Grd_button.place(x = col2_px, y = 40)        
+            Grd_button.place(x = col2_px, y = 40)
+            
+            global Interactive_btn
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         else:
             Grd_button.destroy()
             Grd_button = Button(ws, text = 'Calculate Grad+Proxy', command = lambda:Calc_grd_twist(lower.get(),upper.get(),twist1, TwistPolarity.get(), c5))
             Grd_button.place(x = col2_px, y = 40)
+            
+            Interactive_btn.destroy()
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
             
         global c4
         c4 = 1
@@ -1647,13 +1657,30 @@ if selected_index == 0:
             vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
     
+    def InterVis(canvas, fig):
+        pltwin = tki.Toplevel()
+        pltwin.grab_set()
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+        
+        canvas = FigureCanvasTkAgg(fig, master = pltwin)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas,pltwin)
+        toolbar.update()
+        canvas.get_tk_widget().pack()
+        
     def Skip(arr, c):
         global Grd
         Grd = arr.copy()
         
         if c == 0:
             global vis_btn2
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, Interactive_btn, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing) 
             
             Thr_lbl = Label(ws, text = 'Threshold:')
@@ -1669,7 +1696,7 @@ if selected_index == 0:
             InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, Interactive_btn, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
             Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
@@ -2024,15 +2051,11 @@ if selected_index == 0:
         elif twistpol == "0":
             for j in range(N):
                 Grd[j] = dip.MultiScaleMorphologicalGradient(twist[j], lowerSize = lower, upperSize = upper)+twist1[j]   
-           
-        #calc_lbl = Label(ws, text='Calculation done!', foreground='green')
-        #calc_lbl.place(x = 640, y = 70)
-        
-        #ws.after(2000, destroy_widget, calc_lbl)    
+
         
         if c == 0:
             global vis_btn2
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, Interactive_btn, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing) 
             
             Thr_lbl = Label(ws, text = 'Threshold:')
@@ -2048,7 +2071,7 @@ if selected_index == 0:
             InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), Interactive_btn, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
             Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
@@ -2061,12 +2084,14 @@ if selected_index == 0:
         c5 = 1
         
         global contr2
-        contr2 = 0       
+        contr2 = 0
         
-    def Vis_GrdTwist(contr, Grd, num, canvas, c):
+    def Vis_GrdTwist(contr, Grd, num, canvas, Interactive_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num)
+        
+        global fig2
         fig2 = plt.figure(figsize = (4.5,3.5))
         plot2 = fig2.add_subplot(111)
         if contr == 'X': 
@@ -2087,7 +2112,7 @@ if selected_index == 0:
             plot2.set_ylabel("y", fontsize = 9)
             plot2.set_xlabel("x", fontsize = 9)
             plot2.tick_params(axis='both', which='major', labelsize=7)
-            
+        
         canvas = FigureCanvasTkAgg(fig2, master=ws)
         canvas.draw()
         canvas.get_tk_widget().place(x = 20, y = 100)
@@ -2103,7 +2128,11 @@ if selected_index == 0:
             base_name_grd.place(x = basecol1_px, y = 590)
             save_anim2 = Button(ws, text = 'Save MM Animation', command = lambda:saveanim_grd(Grd, base_name_grd.get('1.0','end-1c'), contr))
             save_anim2.place(x = 20, y = 590)
-            
+                    
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig2))
+        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        
         global c6
         c6 = 1
     
@@ -2452,7 +2481,7 @@ if selected_index == 0:
             ws.after(2000, destroy_widget, calc_lbl)    
 
         if c == 0:
-            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, c8))
+            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, Interactive_btn, c8))
             vis3_btn.place(in_ = InvThresh, y = 0, relx = spacing)      
     
         contr2 = 0
@@ -2476,14 +2505,14 @@ if selected_index == 0:
         elif contr2 == 1:
             calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
             calc_lbl.place(x = 720, y = 370)
-            ws.after(2000, destroy_widget, calc_lbl) 
+            ws.after(2000, destroy_widget, calc_lbl)
         elif contr2 == 2:
             calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
             calc_lbl.place(x = 720, y = 400)   
             ws.after(2000, destroy_widget, calc_lbl)    
 
         if c == 0:
-            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, c8))
+            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, Interactive_btn, c8))
             vis3_btn.place(in_ = InvThresh, y = 0, relx = spacing)      
     
         contr2 = 0
@@ -2491,7 +2520,7 @@ if selected_index == 0:
         contr3 = 0
 
         
-    def Vis_Thresholding(contr, arr, num, Thr, canvas, c):
+    def Vis_Thresholding(contr, arr, num, Thr, canvas, Interactive_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num)
@@ -2597,7 +2626,11 @@ if selected_index == 0:
             spin4.place(in_ = opspin_lbl, y = 0, relx = spacing)         
             spin5 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin5_val, wrap = True, width = wi)
             spin5.place(in_ = init_lbl1, y = 0, relx = spacing)    
-            
+        
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig3))
+        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        
     def Thresholding2(arr, arr2, num, Thr, x1_in, x2_in, y1_in, y2_in, contr2, c):
         #global undo_str
         #undo_str = 'Thresh'
@@ -2867,14 +2900,14 @@ if selected_index == 0:
             spin6 = Spinbox(ws, from_ = 0, to = 3, textvariable = spin6_val, wrap = True, width = wi)
             spin6.place(in_ = shape_lbl, y = 0, relx = spacing)
             
-            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, c13))
+            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, Interactive_btn, c13))
             vis4_btn.place(in_ = spin6, y = 0, relx = spacing)
 
         global c12
         c12 = 1
             
         
-    def Vis_Init(contr, arr, num, num2, canvas, c):
+    def Vis_Init(contr, arr, num, num2, canvas, Interactive_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num) #initialization frame
@@ -2917,7 +2950,11 @@ if selected_index == 0:
             Enter_overl.place(in_ = over_lbl, y = 0, relx = spacing)
             Track_btn = Button(ws, text = 'Track', command = lambda:Track(GrdTw_Thr, C0, C1, C2, C3, spin5_val.get(), spin6_val.get(), overlap.get(), contr3, c14))
             Track_btn.place(x = col2_px, y = 580)
-            
+        
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig4))
+        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        
         global c13
         c13 = 1    
         
@@ -3095,13 +3132,13 @@ if selected_index == 0:
         
         if c == 0:
 
-            vis5_btn = Button(ws, text = 'Visualize Tracked Shape', command = lambda:Vis_track(spin_val.get(), canvas, c15))
+            vis5_btn = Button(ws, text = 'Visualize Tracked Shape', command = lambda:Vis_track(spin_val.get(), canvas, Interactive_btn, c15))
             vis5_btn.place(x = col2_px, y = 610)
         
         global c14
         c14 = 1
             
-    def Vis_track(num, canvas, c):
+    def Vis_track(num, canvas, Interactive_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num)
@@ -3134,15 +3171,9 @@ if selected_index == 0:
         canvas.draw()
         canvas.get_tk_widget().place(x = 20, y = 100)
         
-        #base_name4 = Text(ws, height = 1, width = 30)
-        #base_name4.place(x = 180, y = 620)
-        #save_frames3 = Button(ws, text = 'Save Tracking Frames', command = lambda:savefunc(Plotstr, contr, tracked, base_name4.get('1.0','end-1c')))
-        #save_frames3.place(x = 20, y = 620)
-        
-        #base_name5 = Text(ws, height = 1, width = 30)
-        #base_name5.place(x = 180, y = 650)
-        #save_array3 = Button(ws, text = 'Save Arrays', command = lambda:savearr(tracked, base_name5.get('1.0','end-1c')))
-        #save_array3.place(x = 20, y = 650)
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig5))
+        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         if c == 0:
             Sep3 = Separator(ws, takefocus=0, orient='horizontal', style = "gray.TSeparator")
@@ -3198,7 +3229,7 @@ if selected_index == 0:
             #spin9 = Spinbox(ws, from_ = 0, to = len(tracked)-1, textvariable = spin9_val, wrap = True)
             #spin9.place(x = 930, y = 250)
             #Label(ws, text = 'Frame no.:').place(x = 850, y = 250)
-            vis6_btn = Button(ws, text = 'Visualize Final Mask', command = lambda:Vis_opefill(processed, spin_val.get(), Plotstr, canvas, c19))
+            vis6_btn = Button(ws, text = 'Visualize Final Mask', command = lambda:Vis_opefill(processed, spin_val.get(), Plotstr, canvas, Interactive_btn, c19))
             vis6_btn.place(x = col3_px, y = 250)
         else:
             spin8.destroy()
@@ -3398,7 +3429,7 @@ if selected_index == 0:
         Undo2_btn.config(state = "disabled")
         
         
-    def Vis_opefill(fill, num, Plotstr, canvas, c):
+    def Vis_opefill(fill, num, Plotstr, canvas, Interactive_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         Plotstr = 'processed'
@@ -3430,6 +3461,10 @@ if selected_index == 0:
         canvas = FigureCanvasTkAgg(fig6, master=ws)
         canvas.draw()
         canvas.get_tk_widget().place(x = 20, y = 100)
+        
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig6))
+        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         if c == 0:        
             base_name6 = Text(ws, height = 1, width = 30)
@@ -4328,6 +4363,10 @@ elif selected_index == 1:
             global spin5
             spin5 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin5_val, wrap = True, width = wi)
             spin5.place(in_ = retrack_lbl, y = 0, relx = spacing)
+            
+            global Interactive_btn
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig5))
+            Interactive_btn.place(x = 20, y = 470)
               
         else:
             proc_btn.destroy()
@@ -4341,11 +4380,31 @@ elif selected_index == 1:
             spin5.destroy()
             spin5 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin5_val, wrap = True, width = wi)
             spin5.place(in_ = retrack_lbl, y = 0, relx = spacing)
-     
+ 
+            Interactive_btn.destroy()
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig5))
+            Interactive_btn.place(x = 20, y = 470)
         
         global c2
         c2 = 1
 
+    def InterVis(canvas, fig):
+        pltwin = tki.Toplevel()
+        pltwin.grab_set()
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+        
+        canvas = FigureCanvasTkAgg(fig, master = pltwin)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas,pltwin)
+        toolbar.update()
+        canvas.get_tk_widget().pack()
+        
     def Proceed(contr4, c):      
         
         if c == 0:
@@ -4889,20 +4948,20 @@ elif selected_index == 1:
             spin6 = Spinbox(ws, from_ = 0, to = 3, textvariable = spin6_val, wrap = True, width = wi)
             spin6.place(in_ = shape_lbl, y = 0, relx = spacing)
             global vis4_btn
-            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, c9))
+            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, Interactive_btn, c9))
             vis4_btn.place(in_ = spin6, y = 0, relx = spacing)
         else:
             spin6.destroy()
             spin6 = Spinbox(ws, from_ = 0, to = 3, textvariable = spin6_val, wrap = True, width = wi)
             spin6.place(in_ = shape_lbl, y = 0, relx = spacing)
             vis4_btn.destroy()
-            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, c9))
+            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, Interactive_btn, c9))
             vis4_btn.place(in_ = spin6, y = 0, relx = spacing)
             
         global c8
         c8 = 1
 
-    def Vis_Init(contr, arr, num, num2, canvas, c):
+    def Vis_Init(contr, arr, num, num2, canvas, Interactive_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num) #initialization frame
@@ -4932,6 +4991,10 @@ elif selected_index == 1:
         canvas.draw()
         canvas.get_tk_widget().place(x = 20, y = 100)
         
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig4))
+        Interactive_btn.place(x = 20, y = 470)
+        
         if c == 0:
             over_lbl = Label(ws, text = 'Overlap fraction:')
             over_lbl.place(x = col3_px, y = 130)
@@ -4943,7 +5006,7 @@ elif selected_index == 1:
         else:
             Track_btn.destroy()
             Track_btn = Button(ws, text = 'Track', command = lambda:Track(tracked, C0, C1, C2, C3, spin5_val.get(), spin6_val.get(), overlap.get(), c13))
-            Track_btn.place(x = col3_px, y = 160) 
+            Track_btn.place(x = col3_px, y = 160)
             
         global c9 
         c9 = 1
@@ -6539,8 +6602,33 @@ elif selected_index == 3:
             Random_Button = Button(ws, text = 'Create Points', command = lambda:create_random(Diff, xsteps.get(), contr, c6))
             Random_Button.place(x = col2_px, y = 190)
             
+            global Interactive_btn
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            Interactive_btn.place(in_ = vis7_btn, y = 0, relx = spacing)
+        else: 
+            Interactive_btn.destroy()
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            Interactive_btn.place(in_ = vis7_btn, y = 0, relx = spacing)
+        
         global c4 
         c4 = 1
+
+    def InterVis(canvas, fig):
+        pltwin = tki.Toplevel()
+        pltwin.grab_set()
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+        
+        canvas = FigureCanvasTkAgg(fig, master = pltwin)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas,pltwin)
+        toolbar.update()
+        canvas.get_tk_widget().pack()
 
 
     def savefunc(contr, Diff, filenames):
@@ -7738,9 +7826,34 @@ elif selected_index == 4:
             Calc7 = Button(ws, text = "Calculate", command = lambda:MaxPar(twist1, Mask, contr, c10))
             Calc7.place(x = col3_px, y = 400)
             
+            global Interactive_btn
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            Interactive_btn.place(x = 20, y = 520)
+        else:
+            Interactive_btn.destroy()
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            Interactive_btn.place(x = 20, y = 520)            
+            
         global c3
         c3 = 1
         
+    def InterVis(canvas, fig):
+        pltwin = tki.Toplevel()
+        pltwin.grab_set()
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+        
+        canvas = FigureCanvasTkAgg(fig, master = pltwin)
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas,pltwin)
+        toolbar.update()
+        canvas.get_tk_widget().pack()    
+    
     def Enclosed(arr1, arr2, contr, c):
         N = len(arr1)
         global Encl
@@ -7757,7 +7870,7 @@ elif selected_index == 4:
         
         if c == 0:
             global Plot1
-            Plot1 = Button(ws, text = "Plot", command = lambda:Plot(Encl, canv_num, 'Encl'))
+            Plot1 = Button(ws, text = "Plot", command = lambda:Plot(Encl, canv_num, Interactive_btn, 'Encl'))
             Plot1.place(in_ = Calc1, y = 0, relx = spacing)
             
             global Save1
@@ -7786,7 +7899,7 @@ elif selected_index == 4:
         
         if c == 0:
             global Plot2
-            Plot2 = Button(ws, text = "Plot", command = lambda:Plot(Avg, canv_num, 'Avg'))
+            Plot2 = Button(ws, text = "Plot", command = lambda:Plot(Avg, canv_num, Interactive_btn, 'Avg'))
             Plot2.place(in_ = Calc2, y = 0, relx = spacing)
             
             global Save2
@@ -7820,7 +7933,7 @@ elif selected_index == 4:
         
         if c == 0:
             global Plot3
-            Plot3 = Button(ws, text = "Plot", command = lambda:Plot(Ar, canv_num, 'Area'))
+            Plot3 = Button(ws, text = "Plot", command = lambda:Plot(Ar, canv_num, Interactive_btn, 'Area'))
             Plot3.place(in_ = Calc3, y = 0, relx = spacing)
             
             global Save3
@@ -7865,11 +7978,11 @@ elif selected_index == 4:
         
         if c == 0:
             global Plot4
-            Plot4 = Button(ws, text = "Plot X", command = lambda:Plot(Ccent[:,0], canv_num, 'Centroid'))
+            Plot4 = Button(ws, text = "Plot X", command = lambda:Plot(Ccent[:,0], canv_num, Interactive_btn, 'Centroid'))
             Plot4.place(in_ = Calc4, y = 0, relx = spacing)
             
             global Plot5
-            Plot5 = Button(ws, text = "Plot Y", command = lambda:Plot(Ccent[:,1], canv_num, 'Centroid'))
+            Plot5 = Button(ws, text = "Plot Y", command = lambda:Plot(Ccent[:,1], canv_num, Interactive_btn, 'Centroid'))
             Plot5.place(in_ = Plot4, y = 0, relx = spacing)
             
             global Save4
@@ -7931,7 +8044,7 @@ elif selected_index == 4:
             
         if c == 0:
             global Plot6
-            Plot6 = Button(ws, text = "Plot", command = lambda:Plot(Vel, canv_num, 'Velocity'))
+            Plot6 = Button(ws, text = "Plot", command = lambda:Plot(Vel, canv_num, Interactive_btn, 'Velocity'))
             Plot6.place(in_ = Calc5, y = 0, relx = spacing)
             
             global Save6
@@ -7983,7 +8096,7 @@ elif selected_index == 4:
             
         if c == 0:
             global Plot7
-            Plot7 = Button(ws, text = "Plot", command = lambda:Plot(Minim, canv_num, 'MinPar'))
+            Plot7 = Button(ws, text = "Plot", command = lambda:Plot(Minim, canv_num, Interactive_btn, 'MinPar'))
             Plot7.place(in_ = Calc6, y = 0, relx = spacing)
             
             global Save7
@@ -7999,11 +8112,11 @@ elif selected_index == 4:
             Fname7.place(x = col3_px, y = 220)
             
             global PlotMinCoordsX
-            PlotMinCoordsX = Button(ws, text = "Plot Min X", command = lambda:Plot(Minind[:,0], canv_num, 'MinPar'))
+            PlotMinCoordsX = Button(ws, text = "Plot Min X", command = lambda:Plot(Minind[:,0], canv_num, Interactive_btn, 'MinPar'))
             PlotMinCoordsX.place(x = col3_px, y = 250)
 
             global PlotMinCoordsY
-            PlotMinCoordsY = Button(ws, text = "Plot Min Y", command = lambda:Plot(Minind[:,1], canv_num, 'MinPar'))
+            PlotMinCoordsY = Button(ws, text = "Plot Min Y", command = lambda:Plot(Minind[:,1], canv_num, Interactive_btn, 'MinPar'))
             PlotMinCoordsY.place(in_ = PlotMinCoordsX, y = 0, relx = spacing)
             
             global Fname8
@@ -8059,7 +8172,7 @@ elif selected_index == 4:
             
         if c == 0:
             global Plot8
-            Plot8 = Button(ws, text = "Plot", command = lambda:Plot(Maxim, canv_num, 'MaxPar'))
+            Plot8 = Button(ws, text = "Plot", command = lambda:Plot(Maxim, canv_num, Interactive_btn, 'MaxPar'))
             Plot8.place(in_ = Calc7, y = 0, relx = spacing)
             
             global Save8
@@ -8075,11 +8188,11 @@ elif selected_index == 4:
             Fname9.place(x = col3_px, y = 430)
             
             global PlotMinCoordsX2
-            PlotMinCoordsX2 = Button(ws, text = "Plot Max X", command = lambda:Plot(Maxind[:,0], canv_num, 'MaxPar'))
+            PlotMinCoordsX2 = Button(ws, text = "Plot Max X", command = lambda:Plot(Maxind[:,0], canv_num, Interactive_btn, 'MaxPar'))
             PlotMinCoordsX2.place(x = col3_px, y = 460)
 
             global PlotMinCoordsY2
-            PlotMinCoordsY2 = Button(ws, text = "Plot Max Y", command = lambda:Plot(Maxind[:,1], canv_num, 'MaxPar'))
+            PlotMinCoordsY2 = Button(ws, text = "Plot Max Y", command = lambda:Plot(Maxind[:,1], canv_num, Interactive_btn, 'MaxPar'))
             PlotMinCoordsY2.place(in_ = PlotMinCoordsX2, y = 0, relx = spacing)
             
             global Fname10
@@ -8101,7 +8214,7 @@ elif selected_index == 4:
         global c10
         c10 = 1
         
-    def Plot(arr, num, Plotstr):
+    def Plot(arr, num, Interactive_btn, Plotstr):
         plt.close()
         
         fig = Figure(figsize=(4.5,3.5))
@@ -8145,6 +8258,10 @@ elif selected_index == 4:
             canvas = FigureCanvasTkAgg(fig, master=ws)
             canvas.draw()
             canvas.get_tk_widget().place(x = 20, y = 160)
+
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+        Interactive_btn.place(x = 20, y = 520)   
   
         global canv_num
         canv_num = 1
