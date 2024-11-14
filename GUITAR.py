@@ -2071,7 +2071,7 @@ if selected_index == 0:
             InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), Interactive_btn, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, Interactive_btn, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
             Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
