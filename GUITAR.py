@@ -2667,10 +2667,11 @@ if selected_index == 0:
                 y1_conv = int(np.floor((y1_in-MinY)/dy))
                 y2_conv = int(np.floor((y2_in-MinY)/dy))
                 
-            Corr = arr[num, y1_conv:y2_conv, x1_conv:x2_conv].copy()
+            arr_h = np.array(arr)
+            Corr = arr_h[int(num), int(y1_conv):int(y2_conv), int(x1_conv):int(x2_conv)]
             Corr_op = np.zeros(np.shape(Corr))
             Corr_op[Corr > Thr] = 1
-            GrdTw_Thr[num, y1_conv:y2_conv, x1_conv:x2_conv] = Corr_op
+            GrdTw_Thr[int(num), int(y1_conv):int(y2_conv), int(x1_conv):int(x2_conv)] = Corr_op
     
         calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
         calc_lbl.place(x = 630, y = 400)        
