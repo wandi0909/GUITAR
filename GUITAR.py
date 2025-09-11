@@ -1627,7 +1627,7 @@ if selected_index == 0:
             Grd_upper_entry = Entry(ws, textvariable = upper, width = wi-3)
             Grd_upper_entry.place(in_ = upper_lbl, y = 0, relx = spacing)
             
-            Skip_btn = Button(ws, text = 'Skip MM Gradient', command = lambda:Skip(twist1, c5))
+            Skip_btn = Button(ws, text = 'Skip MM Gradient', command = lambda:Skip(twist1, TwistPolarity.get(), c5))
             Skip_btn.place(x = col2_px, y = 70)
             
             global Grd_button
@@ -1674,9 +1674,15 @@ if selected_index == 0:
         toolbar.update()
         canvas.get_tk_widget().pack()
         
-    def Skip(arr, c):
+    def Skip(arr, twistpol, c):
         global Grd
         Grd = arr.copy()
+        Grd = np.array(Grd)
+        
+        if twistpol == "1":
+            Grd[np.array(Grd) < 0.0] = 0
+        elif twistpol == "-1":
+            Grd[np.array(Grd) > 0.0] = 0
         
         if c == 0:
             global vis_btn2
@@ -2462,10 +2468,11 @@ if selected_index == 0:
         GrdTw_Thr = np.zeros(np.shape(arr))        
         arr = np.array(arr)        
         Thr = float(Thr)
+        
         if twistpol == "1":
             GrdTw_Thr[arr > Thr] = 1
         elif twistpol == "-1":
-            GrdTw_Thr[arr < Thr] = 1        
+            GrdTw_Thr[arr < Thr] = 1
         elif twistpol == "0":
             GrdTw_Thr[np.abs(arr) > Thr] = 1
             
@@ -5161,7 +5168,7 @@ elif selected_index == 1:
             Testmap3 = np.zeros(np.shape(Tw_region0[0,:,:]))
             
         global retracked
-        retracked = LastFrame[num2]
+        retracked = LastFrame[num2].copy()
         
         global contr4
         contr4 = 2
@@ -9119,7 +9126,7 @@ elif selected_index == 4:
         elif Plotstr == 'Centroid':
             save_lbl.place(in_ = Save4, x = 0, y = 90)
         elif Plotstr == 'Velocity':
-            save_lbl.place(in_ = Save5, x = 0, y = 30)
+            save_lbl.place(in_ = Save6, x = 0, y = 30)
         elif Plotstr == 'MinPar':  
             save_lbl.place(in_ = SaveCoords_btn2, y = 30, x = 0)
         elif Plotstr == 'MaxPar':  
@@ -9462,7 +9469,7 @@ elif selected_index == 4:
             elif Plotstr == 'Centroid':
                 save_lbl.place(in_ = Save4, x = 0, y = 90)
             elif Plotstr == 'Velocity':
-                save_lbl.place(in_ = Save5, x = 0, y = 30)
+                save_lbl.place(in_ = Save6, x = 0, y = 30)
             elif Plotstr == 'MinPar':  
                 save_lbl.place(in_ = SaveCoords_btn2, y = 30, x = 0)
             elif Plotstr == 'MaxPar':  
