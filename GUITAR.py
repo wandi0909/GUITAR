@@ -220,7 +220,7 @@ if selected_index == 0:
     #this has the purpose to create the widgets only once, to not overload the GUI with hidden widgets
     c1, c2, c3, c4, c5, c6, c7, c8, c9, c10 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     c11, c12, c13, c14, c15, c16, c17, c18, c19, c20 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
-    c21 = 0
+    c21, c22 = 0 ,0
     
     #file-types that can be read in
     Allowed_Types = ('npz', 'npz+vtr', 'vtr (not recommended - slow!)')
@@ -1634,18 +1634,18 @@ if selected_index == 0:
             Grd_button = Button(ws, text = 'Calculate Grad+Proxy', command = lambda:Calc_grd_twist(lower.get(),upper.get(),twist1, TwistPolarity.get(), c5))
             Grd_button.place(x = col2_px, y = 40)
             
-            global Interactive_btn
-            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
-            Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+            #global Interactive_btn
+            #Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            #Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         else:
             Grd_button.destroy()
             Grd_button = Button(ws, text = 'Calculate Grad+Proxy', command = lambda:Calc_grd_twist(lower.get(),upper.get(),twist1, TwistPolarity.get(), c5))
             Grd_button.place(x = col2_px, y = 40)
             
-            Interactive_btn.destroy()
-            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
-            Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+            #Interactive_btn.destroy()
+            #Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig))
+            #Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
             
         global c4
         c4 = 1
@@ -1657,22 +1657,22 @@ if selected_index == 0:
             vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
     
-    def InterVis(canvas, fig):
-        pltwin = tki.Toplevel()
-        pltwin.grab_set()
-        default_font = tki.font.nametofont("TkDefaultFont")
-        default_font2 = tki.font.nametofont("TkTextFont")
-        default_font3 = tki.font.nametofont("TkFixedFont")
-        default_font.configure(size=9)
-        default_font2.configure(size=9)
-        default_font3.configure(size=9)
-        
-        canvas = FigureCanvasTkAgg(fig, master = pltwin)
-        canvas.draw()
-        canvas.get_tk_widget().pack()
-        toolbar = NavigationToolbar2Tk(canvas,pltwin)
-        toolbar.update()
-        canvas.get_tk_widget().pack()
+    #def InterVis(canvas, fig):
+    #    pltwin = tki.Toplevel()
+    #    pltwin.grab_set()
+    #    default_font = tki.font.nametofont("TkDefaultFont")
+    #    default_font2 = tki.font.nametofont("TkTextFont")
+    #    default_font3 = tki.font.nametofont("TkFixedFont")
+    #    default_font.configure(size=9)
+    #    default_font2.configure(size=9)
+    #    default_font3.configure(size=9)
+    #    
+    #    canvas = FigureCanvasTkAgg(fig, master = pltwin)
+    #    canvas.draw()
+    #    canvas.get_tk_widget().pack()
+    #    toolbar = NavigationToolbar2Tk(canvas,pltwin)
+    #    toolbar.update()
+    #    canvas.get_tk_widget().pack()
         
     def Skip(arr, twistpol, c):
         global Grd
@@ -1702,7 +1702,7 @@ if selected_index == 0:
             InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, Interactive_btn, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
             Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
@@ -2077,7 +2077,7 @@ if selected_index == 0:
             InvThresh.place(x = col2_px, y = 130)
         else:
             vis_btn2.destroy()
-            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, Interactive_btn, c6))
+            vis_btn2 = Button(ws, text='Visualize Grad+Proxy', command = lambda:Vis_GrdTwist(contr, Grd, spin_val.get(), canvas, c6))
             vis_btn2.place(in_ = Grd_button, y = 0, relx = spacing)     
             Thresh.destroy()
             Thresh = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding(Grd, Thr.get(), TwistPolarity.get(), contr2, c7))
@@ -2092,7 +2092,7 @@ if selected_index == 0:
         global contr2
         contr2 = 0
         
-    def Vis_GrdTwist(contr, Grd, num, canvas, Interactive_btn, c):
+    def Vis_GrdTwist(contr, Grd, num, canvas, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num)
@@ -2135,9 +2135,9 @@ if selected_index == 0:
             save_anim2 = Button(ws, text = 'Save MM Animation', command = lambda:saveanim_grd(Grd, base_name_grd.get('1.0','end-1c'), contr))
             save_anim2.place(x = 20, y = 590)
                     
-        Interactive_btn.destroy()
-        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig2))
-        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        #Interactive_btn.destroy()
+        #Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig2))
+        #Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         global c6
         c6 = 1
@@ -2488,7 +2488,7 @@ if selected_index == 0:
             ws.after(2000, destroy_widget, calc_lbl)    
 
         if c == 0:
-            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, Interactive_btn, c8))
+            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, c8))
             vis3_btn.place(in_ = InvThresh, y = 0, relx = spacing)      
     
         contr2 = 0
@@ -2519,7 +2519,7 @@ if selected_index == 0:
             ws.after(2000, destroy_widget, calc_lbl)    
 
         if c == 0:
-            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, Interactive_btn, c8))
+            vis3_btn = Button(ws, text='Visualize Mask', command = lambda:Vis_Thresholding(contr, GrdTw_Thr, spin_val.get(), Thr, canvas, c8))
             vis3_btn.place(in_ = InvThresh, y = 0, relx = spacing)      
     
         contr2 = 0
@@ -2527,7 +2527,7 @@ if selected_index == 0:
         contr3 = 0
 
         
-    def Vis_Thresholding(contr, arr, num, Thr, canvas, Interactive_btn, c):
+    def Vis_Thresholding(contr, arr, num, Thr, canvas, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num)
@@ -2569,6 +2569,10 @@ if selected_index == 0:
             Sep.place(x=col2_px, y=158, relwidth = 0.22)
             Label(ws, text= "Pre-Processing (optional)").place(x = col2_px, y = 160)
             
+            global SubWin_btn
+            SubWin_btn = Button(ws, text = 'Interactive Plot', command = lambda:SelectSub(fig3))
+            SubWin_btn.place(in_ = spinPol, y = 0, relx = spacing)
+            
             global Undo_btn
             op_lbl = Label(ws, text = 'Opening Size')
             op_lbl.place(x = col2_px, y = 190)
@@ -2578,7 +2582,7 @@ if selected_index == 0:
             opspin_lbl = Label(ws, text = 'Frame no.:')
             opspin_lbl.place(x = col2_px, y = 220) 
             global spin4
-            spin4 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin4_val, wrap = True, width = wi)
+            spin4 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin_val, wrap = True, width = wi) #prior: spin4_val
             spin4.place(in_ = opspin_lbl, y = 0, relx = spacing)
             
             subim_lbl = Label(ws, text = 'Sub-image')
@@ -2604,14 +2608,14 @@ if selected_index == 0:
             openall_btn = Button(ws, text = 'Opening All Frames', command = lambda:OpeningAll(GrdTw_Thr, ope.get(), x1_in.get(), x2_in.get(), y1_in.get(), y2_in.get(), c11))
             openall_btn.place(x = col2_px, y = 340)
             
-            open_btn = Button(ws, text = 'Apply Opening', command = lambda:OpeningStep(GrdTw_Thr, ope.get(), spin4_val.get(), x1_in.get(), x2_in.get(), y1_in.get(), y2_in.get(), c10))
+            open_btn = Button(ws, text = 'Apply Opening', command = lambda:OpeningStep(GrdTw_Thr, ope.get(), spin_val.get(), x1_in.get(), x2_in.get(), y1_in.get(), y2_in.get(), c10))
             open_btn.place(x = col2_px, y = 310)
             
             subthr_lbl = Label(ws, text = 'Sub-image Threshold:')
             subthr_lbl.place(x = col2_px, y = 370)
             Enter_thr2 = Entry(ws, textvariable = Thr2, width = wi)
             Enter_thr2.place(in_ = subthr_lbl, y = 0, relx = spacing)
-            Thresh2 = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding2(Grd, GrdTw_Thr, spin4_val.get(), Thr2.get(), x1_in.get(), x2_in.get(), y1_in.get(), y2_in.get(), contr2, c9))
+            Thresh2 = Button(ws, text = 'Apply Threshold', command = lambda:Thresholding2(Grd, GrdTw_Thr, spin_val.get(), Thr2.get(), x1_in.get(), x2_in.get(), y1_in.get(), y2_in.get(), contr2, c9))
             Thresh2.place(x = col2_px, y = 400)
             
             Sep2 = Separator(ws, takefocus=0, orient='horizontal', style = "gray.TSeparator")
@@ -2634,9 +2638,41 @@ if selected_index == 0:
             spin5 = Spinbox(ws, from_ = 0, to = len(arr)-1, textvariable = spin5_val, wrap = True, width = wi)
             spin5.place(in_ = init_lbl1, y = 0, relx = spacing)    
         
-        Interactive_btn.destroy()
-        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig3))
-        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        #Interactive_btn.destroy()
+        #Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig3))
+        #Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+
+        SubWin_btn.destroy()        
+        SubWin_btn = Button(ws, text = 'Interactive Plot', command = lambda:SelectSub(fig3))
+        SubWin_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        
+    def SelectSub(fig):
+     
+        def click(event):
+            if event.button == 1:
+                x1_in.set(np.round(event.xdata, 2))
+                y1_in.set(np.round(event.ydata, 2))
+
+            elif event.button == 3:
+                x2_in.set(np.round(event.xdata, 2))
+                y2_in.set(np.round(event.ydata, 2))
+              
+        pltwin = tki.Toplevel()
+        pltwin.grab_set()
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
+
+        canvas = FigureCanvasTkAgg(fig, master = pltwin)    
+        canvas.draw()
+        canvas.get_tk_widget().pack()
+        toolbar = NavigationToolbar2Tk(canvas, pltwin)
+        toolbar.update()
+        canvas.get_tk_widget().pack()        
+        canvas.mpl_connect("button_press_event", click)   
         
     def Thresholding2(arr, arr2, num, Thr, x1_in, x2_in, y1_in, y2_in, contr2, c):
         #global undo_str
@@ -2908,14 +2944,14 @@ if selected_index == 0:
             spin6 = Spinbox(ws, from_ = 0, to = 3, textvariable = spin6_val, wrap = True, width = wi)
             spin6.place(in_ = shape_lbl, y = 0, relx = spacing)
             
-            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, Interactive_btn, c13))
+            vis4_btn = Button(ws, text='Visualize', command = lambda:Vis_Init(contr, LastFrame, spin5_val.get(), spin6_val.get(), canvas, SubWin_btn, c13))
             vis4_btn.place(in_ = spin6, y = 0, relx = spacing)
 
         global c12
         c12 = 1
             
         
-    def Vis_Init(contr, arr, num, num2, canvas, Interactive_btn, c):
+    def Vis_Init(contr, arr, num, num2, canvas, SubWin_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num) #initialization frame
@@ -2959,9 +2995,9 @@ if selected_index == 0:
             Track_btn = Button(ws, text = 'Track', command = lambda:Track(GrdTw_Thr, C0, C1, C2, C3, spin5_val.get(), spin6_val.get(), overlap.get(), contr3, c14))
             Track_btn.place(x = col2_px, y = 580)
         
-        Interactive_btn.destroy()
-        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig4))
-        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        SubWin_btn.destroy()
+        SubWin_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig4))
+        SubWin_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         global c13
         c13 = 1    
@@ -3140,13 +3176,13 @@ if selected_index == 0:
         
         if c == 0:
 
-            vis5_btn = Button(ws, text = 'Visualize Tracked Shape', command = lambda:Vis_track(spin_val.get(), canvas, Interactive_btn, c15))
+            vis5_btn = Button(ws, text = 'Visualize Tracked Shape', command = lambda:Vis_track(spin_val.get(), canvas, SubWin_btn, c15))
             vis5_btn.place(x = col2_px, y = 610)
         
         global c14
         c14 = 1
             
-    def Vis_track(num, canvas, Interactive_btn, c):
+    def Vis_track(num, canvas, SubWin_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         num = int(num)
@@ -3179,9 +3215,9 @@ if selected_index == 0:
         canvas.draw()
         canvas.get_tk_widget().place(x = 20, y = 100)
         
-        Interactive_btn.destroy()
-        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig5))
-        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        SubWin_btn.destroy()
+        SubWin_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig5))
+        SubWin_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         if c == 0:
             Sep3 = Separator(ws, takefocus=0, orient='horizontal', style = "gray.TSeparator")
@@ -3198,7 +3234,7 @@ if selected_index == 0:
             erspin_lbl = Label(ws, text = 'Frame no.:')
             erspin_lbl.place(x = col3_px, y = 70)
             global spin8
-            spin8 = Spinbox(ws, from_ = 0, to = len(tracked)-1, textvariable = spin8_val, wrap = True, width = wi)
+            spin8 = Spinbox(ws, from_ = 0, to = len(tracked)-1, textvariable = spin_val, wrap = True, width = wi)
             spin8.place(in_ = erspin_lbl, y = 0, relx = spacing)
             
             subim_lbl2 = Label(ws, text = 'Sub-image')
@@ -3224,7 +3260,7 @@ if selected_index == 0:
             fill_btn = Button(ws, text = 'Fill Holes', command = lambda:Fill(processed, Plotstr, c18))
             fill_btn.place(x = col3_px, y = 160)
             
-            open2_btn = Button(ws, text = 'Apply Erosion', command = lambda:ErosionStep(processed, ope2.get(), spin8_val.get(), Plotstr, x11_in.get(), x22_in.get(), y11_in.get(), y22_in.get(), c16))
+            open2_btn = Button(ws, text = 'Apply Erosion', command = lambda:ErosionStep(processed, ope2.get(), spin_val.get(), Plotstr, x11_in.get(), x22_in.get(), y11_in.get(), y22_in.get(), c16))
             open2_btn.place(x = col3_px, y = 190)
             
             openall2_btn = Button(ws, text = 'Erosion All Frames', command = lambda:ErosionAll(processed, ope2.get(), Plotstr, x11_in.get(), x22_in.get(), y11_in.get(), y22_in.get(), c17))
@@ -3237,7 +3273,7 @@ if selected_index == 0:
             #spin9 = Spinbox(ws, from_ = 0, to = len(tracked)-1, textvariable = spin9_val, wrap = True)
             #spin9.place(x = 930, y = 250)
             #Label(ws, text = 'Frame no.:').place(x = 850, y = 250)
-            vis6_btn = Button(ws, text = 'Visualize Final Mask', command = lambda:Vis_opefill(processed, spin_val.get(), Plotstr, canvas, Interactive_btn, c19))
+            vis6_btn = Button(ws, text = 'Visualize Final Mask', command = lambda:Vis_opefill(processed, spin_val.get(), Plotstr, canvas, SubWin_btn, c19))
             vis6_btn.place(x = col3_px, y = 250)
         else:
             spin8.destroy()
@@ -3437,7 +3473,7 @@ if selected_index == 0:
         Undo2_btn.config(state = "disabled")
         
         
-    def Vis_opefill(fill, num, Plotstr, canvas, Interactive_btn, c):
+    def Vis_opefill(fill, num, Plotstr, canvas, SubWin_btn, c):
         plt.close()
         canvas.get_tk_widget().destroy()
         Plotstr = 'processed'
@@ -3470,9 +3506,9 @@ if selected_index == 0:
         canvas.draw()
         canvas.get_tk_widget().place(x = 20, y = 100)
         
-        Interactive_btn.destroy()
-        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig6))
-        Interactive_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        SubWin_btn.destroy()
+        SubWin_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig6))
+        SubWin_btn.place(in_ = spinPol, y = 0, relx = spacing)
         
         if c == 0:        
             base_name6 = Text(ws, height = 1, width = 30)
@@ -3496,10 +3532,12 @@ if selected_index == 0:
             Enter_xsteps.place(in_ = sample_lbl, y = 0, relx = spacing)
         
             Label(ws, text = 'Uniform sampling:').place(x = col3_px, y = 430)
+            global Grid_Button
             Grid_Button = Button(ws, text = 'Create Grid', command = lambda:create_grid(processed, xsteps.get(), contr, c20))
             Grid_Button.place(x = col3_px, y = 460)
     
             Label(ws, text = 'Random sampling:').place(x = col3_px, y = 550)
+            global Random_Button
             Random_Button = Button(ws, text = 'Create Points', command = lambda:create_random(processed, xsteps.get(), contr, c21))
             Random_Button.place(x = col3_px, y = 580)
     
@@ -3979,20 +4017,59 @@ if selected_index == 0:
             
             full_coords.append(new_coords)
         
-        grid_lbl = Label(ws, text = 'Grid created!', foreground = 'green')    
-        grid_lbl.place(x = 930, y = 460)
-        
-        ws.after(2000, destroy_widget, grid_lbl)
-        
         if c == 0:
             base_name7 = Text(ws, height = 1, width = 30)
             base_name7.place(x = 920, y = 490)
             PhysCoord_btn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_coords(full_coords, contr, base_name7.get('1.0','end-1c')))
             PhysCoord_btn.place(x = col3_px, y = 490)
             
-        global c20
-        c20 = 1
+            global Vis_Grid_btn
+            Vis_Grid_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin_val.get(), full_coords, Plotstr, canvas, SubWin_btn))
+            Vis_Grid_btn.place(in_ = Grid_Button, y = 0, relx = spacing)
+
+        grid_lbl = Label(ws, text = 'Grid created!', foreground = 'green')    
+        grid_lbl.place(in_ = Vis_Grid_btn, y = 0, relx = spacing)
+        ws.after(2000, destroy_widget, grid_lbl)
         
+    
+    def vis_grid(num, full_coords, Plotstr, canvas, SubWin_btn):
+        plt.close()
+        canvas.get_tk_widget().destroy()
+        Plotstr = 'sourced'
+        num = int(num)
+        fig7 = plt.figure(figsize = (4.5,3.5))
+        plot7 = fig7.add_subplot(111)
+        if contr == 'X': 
+            plot7.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot7.scatter(MinX+dx*np.array(full_coords[num])[:,0], MinZ+dz*np.array(full_coords[num])[:,1], c = "black", alpha = 0.5, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+        elif contr == 'Y': 
+            plot7.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot7.scatter(MinY+dy*np.array(full_coords[num])[:,0], MinZ+dz*np.array(full_coords[num])[:,1], c = "black", alpha = 0.5, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+        elif contr == 'Z': 
+            plot7.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot7.scatter(MinX+dx*np.array(full_coords[num])[:,0], MinY+dy*np.array(full_coords[num])[:,1], c = "black", alpha = 0.5, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+            
+        canvas = FigureCanvasTkAgg(fig7, master=ws)
+        canvas.draw()
+        canvas.get_tk_widget().place(x = 20, y = 100)
+        
+        SubWin_btn.destroy()
+        SubWin_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig7))
+        SubWin_btn.place(in_ = spinPol, y = 0, relx = spacing)
+        
+    
     def get_phys_coords(full_coords, contr, name):
         global phys_coords
         phys_coords = full_coords.copy()
@@ -4064,17 +4141,21 @@ if selected_index == 0:
                         new_coords2.append([float(random_x[n_ind,j]), float(random_y[n_ind,j])])                
             
             full_coords2.append(new_coords2)
-        
-        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
-        grid_lbl.place(x = 930, y = 580)
-        
-        ws.after(2000, destroy_widget, grid_lbl)
-        
+
+
         if c == 0:
             base_name10 = Text(ws, height = 1, width = 30)
             base_name10.place(x = 920, y = 610)
             PhysCoord_randbtn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_randcoords(full_coords2, contr, base_name10.get('1.0','end-1c')))
             PhysCoord_randbtn.place(x = col3_px, y = 610)
+        
+            global Vis_Grid_btn
+            Vis_Rand_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin_val.get(), full_coords2, Plotstr, canvas, SubWin_btn))
+            Vis_Rand_btn.place(in_ = Random_Button, y = 0, relx = spacing)
+
+        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
+        grid_lbl.place(in_ = Vis_Rand_btn, y = 0, relx = spacing)
+        ws.after(2000, destroy_widget, grid_lbl)        
         
         global c21
         c21 = 1
@@ -4148,9 +4229,52 @@ elif selected_index == 1:
     overlap = tki.StringVar(value = 0.1)
     ope2 = tki.StringVar(value = 0)
     contr4 = 0
+
+    x_str = tki.StringVar(value = '')
+    y_str = tki.StringVar(value = '')
+    z_str = tki.StringVar(value = '')
+    proxy_str = tki.StringVar(value = '')
+    Plotstr = ''
+     
+    varws = tki.Toplevel(ws)
+    varws.title("Variable Specifications")
+    varws.geometry(str(horsz_plotws)+'x200')
+    varws.grab_set()
+    
+    varws.attributes("-topmost", True)
+    
+    default_font = tki.font.nametofont("TkDefaultFont")
+    default_font2 = tki.font.nametofont("TkTextFont")
+    default_font3 = tki.font.nametofont("TkFixedFont")
+    default_font.configure(size=9)
+    default_font2.configure(size=9)
+    default_font3.configure(size=9)
+    
+    xlabel = Label(varws, text = 'Insert Coordinate 1:')
+    xlabel.place(x = 20, y = 10)            
+    xcoord = Entry(varws, textvariable = x_str, width = 10)
+    xcoord.place(in_ = xlabel, y = 0, relx = spacing)
+    
+    ylabel = Label(varws, text = 'Insert Coordinate 2:')
+    ylabel.place(x = 20, y = 40)            
+    ycoord = Entry(varws, textvariable = y_str, width = 10)
+    ycoord.place(in_ = ylabel, y = 0, relx = spacing)
+    
+    zlabel = Label(varws, text = 'Insert Coordinate 3:')
+    zlabel.place(x = 20, y = 70)            
+    zcoord = Entry(varws, textvariable = z_str, width = 10)
+    zcoord.place(in_ = zlabel, y = 0, relx = spacing)
+    
+    proxy_label = Label(varws, text = 'Insert Parameter:')
+    proxy_label.place(x = 20, y = 100)            
+    proxy_coord = Entry(varws, textvariable = proxy_str, width = 10)
+    proxy_coord.place(in_ = proxy_label, y = 0, relx = spacing)
+    
+    conf_btn3 = Button(varws, text='Confirm', command = lambda:destroy_varws(ws, varws, x_str.get(), y_str.get(), z_str.get(), proxy_str.get()))
+    conf_btn3.place(x = 110, y = 150)
     
     #control parameters for avoiding creating widgets multiple times
-    c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
+    c1, c2, c3, c4, c5, c6, c7, c8, c9, c10, c11, c12, c13, c14 = 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
     
     #controls the creation of vis8_btn-Button
     contr_vis = 0
@@ -4161,6 +4285,7 @@ elif selected_index == 1:
     addatbtn = Button(ws, text ='Choose Files', command = lambda:open_file_npz())
     addatbtn.place(in_ = addat, y = 0, relx = spacing)
     
+    global upld
     upld = Button(ws, text='Load Files', command = lambda:uploadFiles_npz_only(file_path_npz, c1))
     upld.place(in_ = addatbtn, y = 0, relx = spacing)
     
@@ -4172,13 +4297,14 @@ elif selected_index == 1:
         global original
         original = []
         global tracked
+        global dim, MinX, MaxX, MinY, MaxY, MinZ, MaxZ, dx, dy, dz, contr
+        
         Test = np.load(file_path_npz[0], allow_pickle = True)
-        for j in range(0, len(Test['data'])):
-            original.append(Test['data'][int(j)])
+        for j in range(0, len(Test["data"])):
+            original.append(Test["data"][int(j)])
         
         original = np.array(original)
         tracked = original.copy()
-        global dim, MinX, MaxX, MinY, MaxY, MinZ, MaxZ, dx, dy, dz, contr
         
         
         if (len(Test['x']) > 1) & (len(Test['y']) > 1):
@@ -4224,55 +4350,104 @@ elif selected_index == 1:
             contr = 'Y'
         
         Uploadnpz_lbl = Label(ws, text='Files Loaded Successfully!', foreground='green')
-        Uploadnpz_lbl.place(x = 165, y = 40)
+        Uploadnpz_lbl.place(in_ = upld, y = 0, relx = spacing)
             
         ws.after(2000, destroy_widget, Uploadnpz_lbl)
         
         if c == 0:
-            global spin
-            global vis_lbl
-            vis_lbl = Label(ws, text = 'Choose Image Frame no.:')
-            vis_lbl.place(x = 20, y = 70)
-            spin = Spinbox(ws, from_ = 0, to = len(original)-1, textvariable = spin_val, wrap = True, width = wi)
-            spin.place(in_ = vis_lbl, y = 0, relx = spacing)
-            global vis_btn
-            vis_btn = Button(ws, text='Visualize Original Mask', command = lambda:Vis_track1(original, spin_val.get(), contr4, canv_num, c2))
-            vis_btn.place(in_ = spin, y = 0, relx = spacing)
-        else:
-            spin.destroy()
-            spin = Spinbox(ws, from_ = 0, to = len(original)-1, textvariable = spin_val, wrap = True, width = wi)
-            spin.place(in_ = vis_lbl, y = 0, relx = spacing)
-            vis_btn.destroy()
-            vis_btn = Button(ws, text='Visualize Original Mask', command = lambda:Vis_track1(original, spin_val.get(), contr4, canv_num, c2))
-            vis_btn.place(in_ = spin, y = 0, relx = spacing)
-        
-        global c1
+            addat = Label(ws, text='Load Parameter Maps:')
+            addat.place(x = 20, y = 40)
+    
+            addatbtn = Button(ws, text ='Choose Files', command = lambda:open_file_npz2()) 
+            addatbtn.place(in_ = addat, y = 0, relx = spacing)
+    
+            upld2 = Button(ws, text='Load Files', command = lambda:uploadFiles_npz_only2(file_path_npz2, x_str.get(), y_str.get(), z_str.get(), proxy_str.get(), c14))
+            upld2.place(in_ = addatbtn, y = 0, relx = spacing)
+            
+        global c1 
         c1 = 1
+
+    def open_file_npz2():
+        global file_path_npz2
+        file_path_npz2 = askopenfilenames(initialdir='./', filetypes=[('NPZ Files', '*npz')])
         
-    def Vis_track1(arr, num, contr4, num2, c):
+    def uploadFiles_npz_only2(file_path_npz2, x_str, y_str, z_str, proxy_str, c):
+        
+        global twist1
+        twist1 = []
+        for j in range(0, len(file_path_npz2)):
+            Test = np.load(file_path_npz2[j], allow_pickle = True)
+            twist1.append(np.transpose(Test[proxy_str]))      
+            
+        if np.shape(original) == np.shape(twist1):        
+            Uploadnpz_lbl = Label(ws, text='Files Loaded Successfully!', foreground='green')
+            Uploadnpz_lbl.place(x = 165, y = 100)        
+            ws.after(2000, destroy_widget, Uploadnpz_lbl)
+    
+            if c == 0:
+                global spin
+                global vis_lbl
+                vis_lbl = Label(ws, text = 'Choose Image Frame no.:')
+                vis_lbl.place(x = 20, y = 70)
+                spin = Spinbox(ws, from_ = 0, to = len(original)-1, textvariable = spin_val, wrap = True, width = wi)
+                spin.place(in_ = vis_lbl, y = 0, relx = spacing)
+                global vis_btn
+                vis_btn = Button(ws, text='Visualize Original Mask', command = lambda:Vis_track1(original, twist1, spin_val.get(), contr4, canv_num, c2))
+                vis_btn.place(in_ = spin, y = 0, relx = spacing)
+            else:
+                spin.destroy()
+                spin = Spinbox(ws, from_ = 0, to = len(original)-1, textvariable = spin_val, wrap = True, width = wi)
+                spin.place(in_ = vis_lbl, y = 0, relx = spacing)
+                vis_btn.destroy()
+                vis_btn = Button(ws, text='Visualize Original Mask', command = lambda:Vis_track1(original, twist1, spin_val.get(), contr4, canv_num, c2))
+                vis_btn.place(in_ = spin, y = 0, relx = spacing)
+            
+            global c14
+            c14 = 1
+
+        else:
+            Uploadnpz_lbl = Label(ws, text='File Dimensions Do Not Match!', foreground='red')
+            Uploadnpz_lbl.place(x = 165, y = 100)        
+            ws.after(2000, destroy_widget, Uploadnpz_lbl)        
+        
+    def Vis_track1(arr, twist, num, contr4, num2, c):
         plt.close()
         num = int(num)
         fig5 = plt.figure(figsize = (4.5,3.5))
         plot5 = fig5.add_subplot(111)
         
         if contr == 'X': 
-            plot5.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
-            plot5.set_title("Input Shape, Frame "+str(num), fontsize = 8)
+            plot5.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot5.contour(arr[num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black")
+            plot5.set_title("Contour map no. "+str(num), fontsize = 9)
             plot5.set_ylabel("y", fontsize = 9)
             plot5.set_xlabel("x", fontsize = 9)
             plot5.tick_params(axis='both', which='major', labelsize=7)
+            plot5.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+            plot5.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot5.yaxis.set_minor_locator(AutoMinorLocator(5))           
+            
         elif contr == 'Y': 
-            plot5.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
-            plot5.set_title("Input Shape, Frame "+str(num), fontsize = 8)
+            plot5.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot5.contour(arr[num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 0.5)
+            plot5.set_title("Contour map no. "+str(num), fontsize = 9)
             plot5.set_ylabel("y", fontsize = 9)
             plot5.set_xlabel("x", fontsize = 9)
             plot5.tick_params(axis='both', which='major', labelsize=7)
-        elif contr == 'Z': 
-            plot5.imshow(arr[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
-            plot5.set_title("Input Shape, Frame "+str(num), fontsize = 8)
+            plot5.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+            plot5.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot5.yaxis.set_minor_locator(AutoMinorLocator(5))
+            
+        elif contr == 'Z':    
+            plot5.imshow(twist[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot5.contour(arr[num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 0.5)
+            plot5.set_title("Contour map no. "+str(num), fontsize = 9)
             plot5.set_ylabel("y", fontsize = 9)
             plot5.set_xlabel("x", fontsize = 9)
-            plot5.tick_params(axis='both', which='major', labelsize=7)            
+            plot5.tick_params(axis='both', which='major', labelsize=7) 
+            plot5.ticklabel_format(axis = 'both', style = 'sci', scilimits = (-3,3), useMathText = True)
+            plot5.xaxis.set_minor_locator(AutoMinorLocator(5))
+            plot5.yaxis.set_minor_locator(AutoMinorLocator(5))           
         
         if num2 == 0:
             global canvas
@@ -4287,7 +4462,7 @@ elif selected_index == 1:
         
         global canv_num
         canv_num = 1        
-                
+
         if c == 0: 
             global proc_btn
             proc_btn = Button(ws, text = 'Proceed', command = lambda:Proceed(contr4, c10))
@@ -4373,7 +4548,7 @@ elif selected_index == 1:
             spin5.place(in_ = retrack_lbl, y = 0, relx = spacing)
             
             global Interactive_btn
-            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig5))
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig5))
             Interactive_btn.place(x = 20, y = 470)
               
         else:
@@ -4390,13 +4565,23 @@ elif selected_index == 1:
             spin5.place(in_ = retrack_lbl, y = 0, relx = spacing)
  
             Interactive_btn.destroy()
-            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig5))
+            Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig5))
             Interactive_btn.place(x = 20, y = 470)
         
         global c2
         c2 = 1
 
-    def InterVis(canvas, fig):
+    def SelectSub(fig):
+     
+        def click(event):
+            if event.button == 1:
+                x1_in.set(np.round(event.xdata, 2))
+                y1_in.set(np.round(event.ydata, 2))
+
+            elif event.button == 3:
+                x2_in.set(np.round(event.xdata, 2))
+                y2_in.set(np.round(event.ydata, 2))
+              
         pltwin = tki.Toplevel()
         pltwin.grab_set()
         default_font = tki.font.nametofont("TkDefaultFont")
@@ -4405,13 +4590,14 @@ elif selected_index == 1:
         default_font.configure(size=9)
         default_font2.configure(size=9)
         default_font3.configure(size=9)
-        
-        canvas = FigureCanvasTkAgg(fig, master = pltwin)
+
+        canvas = FigureCanvasTkAgg(fig, master = pltwin)    
         canvas.draw()
         canvas.get_tk_widget().pack()
-        toolbar = NavigationToolbar2Tk(canvas,pltwin)
+        toolbar = NavigationToolbar2Tk(canvas, pltwin)
         toolbar.update()
-        canvas.get_tk_widget().pack()
+        canvas.get_tk_widget().pack()        
+        canvas.mpl_connect("button_press_event", click)
         
     def Proceed(contr4, c):      
         
@@ -4599,7 +4785,7 @@ elif selected_index == 1:
         Undo_btn.config(state = "normal")
 
         if c_v == 0:
-            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, spin_val.get(), contr4, canv_num, c2))
+            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, twist1, spin_val.get(), contr4, canv_num, c2))
             vis8_btn.place(x = col2_px, y = 430)
             
             global contr_vis
@@ -4612,13 +4798,6 @@ elif selected_index == 1:
         global tracked
         tracked = arr_2.copy()
         
-        #if undo_str == 'Open':
-        #    calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
-        #    calc_lbl.place(x = 740, y = 190)
-        #elif undo_str == 'OpenAll':
-        #    calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
-        #    calc_lbl.place(x = 740, y = 220)
-        
         Undo_btn.config(state = "disabled")
         
         calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
@@ -4627,8 +4806,6 @@ elif selected_index == 1:
         ws.after(2000, destroy_widget, calc_lbl)
     
     def OpeningAll(arr, ope_size, x1_in, x2_in, y1_in, y2_in, c, c_v):
-        #global undo_str
-        #undo_str = 'OpenAll'
         
         global arr_before2
         arr_before2 = arr.copy()
@@ -4686,7 +4863,7 @@ elif selected_index == 1:
         Undo_btn.config(state = "normal")
             
         if c_v == 0:
-            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, spin_val.get(), contr4, canv_num, c2))
+            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, twist1, spin_val.get(), contr4, canv_num, c2))
             vis8_btn.place(x = col2_px, y = 430)
             
             global contr_vis
@@ -4753,7 +4930,7 @@ elif selected_index == 1:
         Undo_btn.config(state = "normal")               
             
         if c_v == 0:
-            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, spin_val.get(), contr4, canv_num, c2))
+            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, twist1, spin_val.get(), contr4, canv_num, c2))
             vis8_btn.place(x = col2_px, y = 430)
             
             global contr_vis
@@ -4821,7 +4998,7 @@ elif selected_index == 1:
         Undo_btn.config(state = "normal")      
             
         if c_v == 0:
-            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, spin_val.get(), contr4, canv_num, c2))
+            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, twist1, spin_val.get(), contr4, canv_num, c2))
             vis8_btn.place(x = col2_px, y = 430)
             
             global contr_vis
@@ -4862,7 +5039,7 @@ elif selected_index == 1:
         Undo_btn.config(state = "normal")
             
         if c_v == 0:
-            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, spin_val.get(), contr4, canv_num, c2))
+            vis8_btn = Button(ws, text='Visualize Processing', command = lambda:Vis_track1(tracked, twist1, spin_val.get(), contr4, canv_num, c2))
             vis8_btn.place(x = col2_px, y = 430)
 
             global contr_vis
@@ -4870,22 +5047,6 @@ elif selected_index == 1:
     
         global c7
         c7 = 1
-        
-#    def Undo2(arr_before, undo_str):
-#        global tracked
-#        tracked = arr_before.copy()
-#        
-#        if undo_str == 'Erosion':
-#            calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
-#            calc_lbl.place(x = 740, y = 310)
-#        elif undo_str == 'ErosionAll':
-#            calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
-#            calc_lbl.place(x = 740, y = 340)
-#        elif undo_str == 'Fill':  
-#            calc_lbl = Label(ws, text = 'Done!', foreground = 'green')
-#            calc_lbl.place(x = 740, y = 400) 
-#        
-#        ws.after(2000, destroy_widget, calc_lbl)    
         
     def init_tracking(arr, num, c):
         arr = np.array(arr)
@@ -4977,19 +5138,22 @@ elif selected_index == 1:
         fig4 = plt.figure(figsize = (4.5,3.5))
         plot4 = fig4.add_subplot(111)
         if contr == 'X': 
-            plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot4.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot4.contour(arr[num2][num], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = "black", linewidths = 1)
             plot4.set_title("Initial Shape "+str(num2), fontsize = 8)
             plot4.set_ylabel("Z", fontsize = 9)
             plot4.set_xlabel("X", fontsize = 9)
             plot4.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Y': 
-            plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot4.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot4.contour(arr[num2][num], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = "black", linewidths = 1)
             plot4.set_title("Initial Shape "+str(num2), fontsize = 8)
             plot4.set_ylabel("Z", fontsize = 9)
             plot4.set_xlabel("Y", fontsize = 9)
             plot4.tick_params(axis='both', which='major', labelsize=7)
         elif contr == 'Z': 
-            plot4.imshow(arr[num2][num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+            plot4.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot4.contour(arr[num2][num], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = "black", linewidths = 1)
             plot4.set_title("Initial Shape "+str(num2), fontsize = 8)
             plot4.set_ylabel("Y", fontsize = 9)
             plot4.set_xlabel("X", fontsize = 9)
@@ -5000,7 +5164,7 @@ elif selected_index == 1:
         canvas.get_tk_widget().place(x = 20, y = 100)
         
         Interactive_btn.destroy()
-        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig4))
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig4))
         Interactive_btn.place(x = 20, y = 470)
         
         if c == 0:
@@ -5179,11 +5343,11 @@ elif selected_index == 1:
 
         if c == 0:
             global vis5_btn
-            vis5_btn = Button(ws, text = 'Visualize Tracking', command = lambda:Vis_track1(retracked, spin_val.get(), contr4, canvas, c2))
+            vis5_btn = Button(ws, text = 'Visualize Tracking', command = lambda:Vis_track1(retracked, twist1, spin_val.get(), contr4, canvas, c2))
             vis5_btn.place(in_ = Track_btn, y = 0, relx = spacing)
         else:
             vis5_btn.destroy()
-            vis5_btn = Button(ws, text = 'Visualize Tracking', command = lambda:Vis_track1(retracked, spin_val.get(), contr4, canvas, c2))
+            vis5_btn = Button(ws, text = 'Visualize Tracking', command = lambda:Vis_track1(retracked, twist1, spin_val.get(), contr4, canvas, c2))
             vis5_btn.place(in_ = Track_btn, y = 0, relx = spacing)
             
         global c13
@@ -5193,7 +5357,7 @@ elif selected_index == 1:
         #add option that it creates a separate folder for the images
         plotws = tki.Toplevel(ws)
         plotws.title("Plot Specifications")
-        plotws.geometry(str(horsz_plotws)+'x670')
+        plotws.geometry(str(horsz_plotws*2)+'x670')
         plotws.grab_set()
         
         #Set colormap:
@@ -5227,6 +5391,59 @@ elif selected_index == 1:
             #print("I was here")
     
         listbox3.bind('<<ListboxSelect>>', color_selected)
+        
+        #Set contour color:
+        global contc_to_use
+        contc_to_use = "black"
+        
+        #enable listbox if customize option is on
+        def set_contcolor(boxon):
+            if boxon % 2 == 1:
+                listbox4.config(state = "normal")
+            else:
+                listbox4.config(state = "disabled")
+        
+        #contour checkbox
+        def_contcolor = tki.IntVar(value = 0)
+        check_default_contcolor = Checkbutton(plotws, text = "Customize", variable = def_contcolor, command = lambda:set_contcolor(def_contcolor.get()))        
+        check_default_contcolor.place(in_= listbox3, y = 55, relx = spacing)
+        
+        listbox4 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+
+        #listbox for contour
+        for j in range(len(contc)):
+            listbox4.insert(tki.END, contc[j])
+        listbox4.place(in_ = check_default_contcolor, y = -55, relx = spacing)
+        listbox4.config(state = "disabled")
+        
+        contcolor_lbl = Label(plotws, text = 'Choose Contour Color:')    
+        contcolor_lbl.place(in_ = listbox4, x = 0, y = -30)
+        
+        #get selected colormap
+        def color_selected2(event):
+            global contc_to_use
+            contc_to_use = contc[int(listbox4.curselection()[0])]
+    
+        listbox4.bind('<<ListboxSelect>>', color_selected2)
+
+        #set contour thickness
+        def_contsize = tki.IntVar(value = 0)
+        check_default_contsize = Checkbutton(plotws, text = "Customize", variable = def_contsize, command = lambda:set_contsize(def_contsize.get()))        
+        check_default_contsize.place(in_ = check_default_contcolor, x = 0, y = 90) 
+
+        cont_Label = Label(plotws, text='Choose Contour Thickness:')
+        cont_Label.place(in_ = contcolor_lbl, x = 0, y = 170)       
+        
+        contsize = tki.StringVar(value = "1")
+        Enter_contsize = Entry(plotws, textvariable = contsize, width = 6)
+        Enter_contsize.place(in_ = cont_Label, x = 0, y = 30)
+        Enter_contsize.config(state = "disabled")
+        
+        def set_contsize(boxon):
+            if boxon % 2 == 1:
+                Enter_contsize.config(state = "normal")
+            else:
+                Enter_contsize.config(state = "disabled")       
         
         #Set figure size:
         def_figsize = tki.IntVar(value = 0)
@@ -5399,18 +5616,19 @@ elif selected_index == 1:
         FormatBox = Combobox(plotws, textvariable = current_format, values = formatlist, state = 'readonly', width = 4)
         FormatBox.place(in_ = format_lbl, y = 0, relx = spacing)
         
-        conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_2(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
-        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
-        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, current_format.get()))
+        #confirm button to grab all variables from customization window and to destroy this window
+        conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_6(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
+        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), def_contcolor.get(), def_contsize.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, current_format.get(), contc_to_use, contsize.get()))
         
         conf_btn3.place(x = 120, y = 635)
 
-        def destroy_widget_2(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
-        labelsize, vmin, vmax, cmap_to_use, format_):
-            #add option that it creates a separate folder for the images
-            #print(cmap_to_use)
-            #if not customized, use default settings:
+        def destroy_widget_6(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, boxon9, boxon10, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
+        labelsize, vmin, vmax, cmap_to_use, format_, contc_to_use, contsize):
+
+            L = len(arr)
             
+            #if not customized, use default values/settings:            
             if boxon1 % 2 == 0:
                 cmap_to_use = "RdBu_r"
                 
@@ -5436,17 +5654,27 @@ elif selected_index == 1:
             else:
                 labelsize = int(labelsize)
                 
-            L = len(arr)
+            if boxon10 % 2 == 0:
+                contsize = 1
+            else:
+                contsize = int(contsize)            
+            
+            #plotting and saving the figuresizes
+            
+            #Plotstr controls which array to plot
+            #contr tells which dimensions (for cartesian: x, y, z) to use
             for j in range(L):
                 fig = Figure(figsize=(figx, figy))
                 plot1 = fig.add_subplot(111)
                 if contr == 'X': 
                     if boxon8 % 2 == 0:
-                        plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+                        plot1.contour(arr[j], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
                     else:
-                        plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+                        plot1.contour(arr[j], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
                     if boxon3 % 2 == 0:
-                        plot1.set_title("Processed Shape, Frame "+str(j), fontsize = titlesize)
+                        plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
                     else: 
                         plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
@@ -5459,13 +5687,15 @@ elif selected_index == 1:
                     plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
                     plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
-                elif contr == 'Y': 
+                elif contr == 'Y':
                     if boxon8 % 2 == 0:
-                        plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.contour(arr[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
                     else:
-                        plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.contour(arr[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
                     if boxon3 % 2 == 0:
-                        plot1.set_title("Processed Shape, Frame "+str(j), fontsize = titlesize)
+                        plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
                     else: 
                         plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
@@ -5478,13 +5708,15 @@ elif selected_index == 1:
                     plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
                     plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
-                elif contr == 'Z': 
+                elif contr == 'Z':                        
                     if boxon8 % 2 == 0:
-                        plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+                        plot1.contour(arr[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
                     else:
-                        plot1.imshow(arr[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinY, MaxY])
+                        plot1.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                        plot1.contour(arr[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
                     if boxon3 % 2 == 0:
-                        plot1.set_title("Processed Shape, Frame "+str(j), fontsize = titlesize)
+                        plot1.set_title("Tracked Contour, Frame "+str(j), fontsize = titlesize)
                     else: 
                         plot1.set_title(title_name +' '+str(j), fontsize = titlesize)
                     if boxon6 % 2 == 0:                            
@@ -5497,11 +5729,13 @@ elif selected_index == 1:
                     plot1.xaxis.set_minor_locator(AutoMinorLocator(5))
                     plot1.yaxis.set_minor_locator(AutoMinorLocator(5))
                     fig.savefig(filenames+str(j)+'.'+ format_, bbox_inches = "tight")
-                    
-            save_lbl = Label(ws, text = 'Saved!', foreground = 'green')
-            save_lbl.place(x = saved_px, y = 220)
             
-            ws.after(2000, destroy_widget, save_lbl)
+            #correctly place label to indicate that the plot was indeed saved
+            #save_lbl = Label(ws, text = 'Saved!', foreground = 'green')
+            #save_lbl.place(x = saved_px, y = 280)
+            
+            #destroy the "saved" label
+            #ws.after(2000, destroy_widget, save_lbl)
             plotws.destroy()
                 
     def savearr(arr, filename):
@@ -5526,10 +5760,18 @@ elif selected_index == 1:
         ws.after(2000, destroy_widget, save_lbl)
 
     def saveanim_final(arr, filename, contr):
+
         plotws = tki.Toplevel(ws)
         plotws.title("Plot Specifications")
-        plotws.geometry(str(horsz_plotws)+'x640')
+        plotws.geometry(str(horsz_plotws*2)+'x640')
         plotws.grab_set()
+        
+        default_font = tki.font.nametofont("TkDefaultFont")
+        default_font2 = tki.font.nametofont("TkTextFont")
+        default_font3 = tki.font.nametofont("TkFixedFont")
+        default_font.configure(size=9)
+        default_font2.configure(size=9)
+        default_font3.configure(size=9)
         
         #Set colormap:
         global cmap_to_use
@@ -5561,6 +5803,60 @@ elif selected_index == 1:
             cmap_to_use = cmaps[int(listbox3.curselection()[0])]
     
         listbox3.bind('<<ListboxSelect>>', color_selected)
+        
+        #Set contour color:
+        global contc_to_use
+        contc_to_use = "black"
+        
+        #enable listbox if customize option is on
+        def set_contcolor(boxon):
+            if boxon % 2 == 1:
+                listbox4.config(state = "normal")
+            else:
+                listbox4.config(state = "disabled")
+        
+        #contour checkbox
+        def_contcolor = tki.IntVar(value = 0)
+        check_default_contcolor = Checkbutton(plotws, text = "Customize", variable = def_contcolor, command = lambda:set_contcolor(def_contcolor.get()))        
+        check_default_contcolor.place(in_= listbox3, y = 55, relx = spacing)
+        
+        listbox4 = tki.Listbox(plotws, height=7, width = 25, selectmode=tki.SINGLE, exportselection=False)
+
+        #listbox for contour
+        for j in range(len(contc)):
+            listbox4.insert(tki.END, contc[j])
+        listbox4.place(in_ = check_default_contcolor, y = -55, relx = spacing)
+        listbox4.config(state = "disabled")
+        
+        contcolor_lbl = Label(plotws, text = 'Choose Contour Color:')    
+        contcolor_lbl.place(in_ = listbox4, x = 0, y = -30)
+        
+        #get selected colormap
+        def color_selected2(event):
+            global contc_to_use
+            contc_to_use = contc[int(listbox4.curselection()[0])]
+    
+        listbox4.bind('<<ListboxSelect>>', color_selected2)
+
+        #set contour thickness
+        def_contsize = tki.IntVar(value = 0)
+        check_default_contsize = Checkbutton(plotws, text = "Customize", variable = def_contsize, command = lambda:set_contsize(def_contsize.get()))        
+        check_default_contsize.place(in_ = check_default_contcolor, x = 0, y = 90) 
+
+        cont_Label = Label(plotws, text='Choose Contour Thickness:')
+        cont_Label.place(in_ = contcolor_lbl, x = 0, y = 170)       
+        
+        contsize = tki.StringVar(value = "1")
+        Enter_contsize = Entry(plotws, textvariable = contsize, width = 6)
+        Enter_contsize.place(in_ = cont_Label, x = 0, y = 30)
+        Enter_contsize.config(state = "disabled")
+        
+        def set_contsize(boxon):
+            if boxon % 2 == 1:
+                Enter_contsize.config(state = "normal")
+            else:
+                Enter_contsize.config(state = "disabled")
+        
         
         #Set figure size:
         def_figsize = tki.IntVar(value = 0)
@@ -5724,18 +6020,18 @@ elif selected_index == 1:
                 Enter_vmin.config(state = "disabled")
                 Enter_vmax.config(state = "disabled")
         
-        conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_3(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
-        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
-        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use))
+        conf_btn3 = Button(plotws, text='Confirm', command = lambda:destroy_widget_5(plotws, def_colormap.get(), def_figsize.get(), def_title.get(), \
+        def_titlesize.get(), def_ticksize.get(), def_label.get(), def_labelsize.get(), def_minmax.get(), def_contcolor.get(), def_contsize.get(), figure_x.get(), figure_y.get(), text_title.get('1.0','end-1c'), titlesize.get(), \
+        ticksize.get(), label_x.get(), label_y.get(), labelsize.get(), vmin.get(), vmax.get(), cmap_to_use, contc_to_use, contsize.get()))
         
         conf_btn3.place(x = 120, y = 605)
         
-        def destroy_widget_3(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
-        labelsize, vmin, vmax, cmap_to_use):
+        def destroy_widget_5(widget, boxon1, boxon2, boxon3, boxon4, boxon5, boxon6, boxon7, boxon8, boxon9, boxon10, figx, figy, title_name, titlesize, ticksize, labelx, labely,\
+        labelsize, vmin, vmax, cmap_to_use, contc_to_use, contsize):
 
             L = len(arr)
             if boxon1 % 2 == 0:
-                cmap_to_use = "gray"
+                cmap_to_use = "RdBu_r"
                 
             if boxon2 % 2 == 0:
                 figx = dim[1]/50
@@ -5760,11 +6056,19 @@ elif selected_index == 1:
                 labelsize = int(labelsize)
             
             if boxon8 % 2 == 0:
-                vmin = 0
-                vmax = 1.5
+                vmin = -5
+                vmax = 5
             else:
                 vmin = float(vmin)
                 vmax = float(vmax)
+                
+            if boxon9 % 2 == 0:
+                contc_to_use = "black"
+
+            if boxon10 % 2 == 0:
+                contsize = 1
+            else:
+                contsize = int(contsize)
         
             fig_anim = plt.figure(figsize=(figx, figy))
             if contr == 'X':
@@ -5772,8 +6076,9 @@ elif selected_index == 1:
                 nanarray = np.empty((dim[1], dim[0]))
                 nanarray[:] = np.nan
                 im = plt.imshow(nanarray, origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+  
                 if boxon3 % 2 == 0:
-                    ax_anim.set_title("Processed Shape", fontsize = titlesize)
+                    ax_anim.set_title("Proxy map", fontsize = titlesize)
                 else: 
                     ax_anim.set_title(title_name, fontsize = titlesize)
                 if boxon6 % 2 == 0:
@@ -5783,6 +6088,21 @@ elif selected_index == 1:
                     ax_anim.set_ylabel(labely, fontsize = labelsize)
                     ax_anim.set_xlabel(labelx, fontsize = labelsize) 
                 ax_anim.tick_params(labelsize = ticksize)
+                                                
+                def init():
+                    im.set_data(nanarray)
+                    #plt.axis('off')
+                    return [im]
+            
+                def animate(j):
+                    ax_anim.clear()
+                    ax_anim.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinZ, MaxZ])
+                    ax_anim.contour(arr[j], [0.5], extent = [MinX, MaxX, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                
+                    #im.set_array(arr[j])
+                    #plt.axis('off')
+                    return [im]
+                    
             elif contr == 'Y': 
                 ax_anim = plt.axes(xlim=(MinY, MaxY), ylim=(MinZ, MaxZ))
                 nanarray = np.empty((dim[1], dim[0]))
@@ -5795,11 +6115,25 @@ elif selected_index == 1:
                     ax_anim.set_ylabel(labely, fontsize = labelsize)
                     ax_anim.set_xlabel(labelx, fontsize = labelsize)
                 if boxon3 % 2 == 0:
-                    ax_anim.set_title("Processed Shape", fontsize = titlesize)
+                    ax_anim.set_title("Proxy map", fontsize = titlesize)
                 else: 
                     ax_anim.set_title(title_name, fontsize = titlesize) 
                 ax_anim.tick_params(labelsize = ticksize)
-            elif contr == 'Z': 
+                                                
+                def init():
+                    im.set_data(nanarray)
+                    #plt.axis('off')
+                    return [im]
+            
+                def animate(j):
+                    ax_anim.clear()
+                    ax_anim.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinY, MaxY, MinZ, MaxZ])
+                    ax_anim.contour(arr[j], [0.5], extent = [MinY, MaxY, MinZ, MaxZ], colors = contc_to_use, linewidths = contsize)
+                
+                    #im.set_array(arr[j])
+                    #plt.axis('off')
+                    return [im]
+            elif contr == 'Z':
                 ax_anim = plt.axes(xlim=(MinX, MaxX), ylim=(MinY, MaxY))
                 nanarray = np.empty((dim[1], dim[0]))
                 nanarray[:] = np.nan
@@ -5807,36 +6141,36 @@ elif selected_index == 1:
                 if boxon6 % 2 == 0:
                     ax_anim.set_ylabel("y", fontsize = labelsize)
                     ax_anim.set_xlabel("x", fontsize = labelsize)
-                else: 
+                else:
                     ax_anim.set_ylabel(labely, fontsize = labelsize)
                     ax_anim.set_xlabel(labelx, fontsize = labelsize)
                 if boxon3 % 2 == 0:
-                    ax_anim.set_title("Processed Shape", fontsize = titlesize)
-                else: 
+                    ax_anim.set_title("Proxy map", fontsize = titlesize)
+                else:
                     ax_anim.set_title(title_name, fontsize = titlesize) 
-                ax_anim.tick_params(labelsize = ticksize)
+                ax_anim.tick_params(labelsize = ticksize)               
+                                                
+                def init():
+                    im.set_data(nanarray)
+                    #plt.axis('off')
+                    return [im]
+            
+                def animate(j):
+                    ax_anim.clear()
+                    ax_anim.imshow(twist1[j], origin = "lower", cmap = cmap_to_use, vmin = vmin, vmax = vmax, extent = [MinX, MaxX, MinY, MaxY])
+                    ax_anim.contour(arr[j], [0.5], extent = [MinX, MaxX, MinY, MaxY], colors = contc_to_use, linewidths = contsize)
                 
-            def init():
-                im.set_data(nanarray)
-                #plt.axis('off')
-                return [im]
-        
-            def animate(j):
-                im.set_array(arr[j])
-                #plt.axis('off')
-                return [im]
+                    #im.set_array(arr[j])
+                    #plt.axis('off')
+                    return [im]
+
         
             anim = FuncAnimation(fig_anim, animate, init_func=init,
                                     frames=L, interval=120, blit=True)
         
-            anim.save(filename+'.gif', writer='imagemagick')
-            
+            anim.save(filename+'.gif', writer='imagemagick')            
             plt.close()
-        
-            save_lbl = Label(ws, text = 'Saved!', foreground = 'green')    
-            save_lbl.place(x = saved_px, y = 280)
-        
-            ws.after(2000, destroy_widget, save_lbl)
+            
             plotws.destroy()
        
     def create_grid(arr, steps, contr, c):
@@ -5895,8 +6229,12 @@ elif selected_index == 1:
             
             full_coords.append(new_coords)
         
+        global Vis_Grid_btn
+        Vis_Grid_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin_val.get(), full_coords, Plotstr, canvas, Interactive_btn))
+        Vis_Grid_btn.place(in_ = Grid_Button, y = 0, relx = spacing)
+
         grid_lbl = Label(ws, text = 'Grid created!', foreground = 'green')    
-        grid_lbl.place(x = 920, y = 400)
+        grid_lbl.place(in_ = Vis_Grid_btn, y = 0, relx = spacing)
         
         ws.after(2000, destroy_widget, grid_lbl)
         
@@ -5917,7 +6255,46 @@ elif selected_index == 1:
             
         global c11
         c11 = 1
+    
+
+    def vis_grid(num, full_coords, Plotstr, canvas, Interactive_btn):
+        plt.close()
+        canvas.get_tk_widget().destroy()
+        Plotstr = 'sourced'
+        num = int(num)
+        fig7 = plt.figure(figsize = (4.5,3.5))
+        plot7 = fig7.add_subplot(111)
+        if contr == 'X': 
+            plot7.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot7.scatter(MinX+dx*np.array(full_coords[num])[:,0], MinZ+dz*np.array(full_coords[num])[:,1], c = "black", alpha = 0.5, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+        elif contr == 'Y': 
+            plot7.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot7.scatter(MinY+dy*np.array(full_coords[num])[:,0], MinZ+dz*np.array(full_coords[num])[:,1], c = "black", alpha = 0.5, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+        elif contr == 'Z': 
+            plot7.imshow(twist1[num], origin = "lower", cmap = "RdBu_r", vmin = -5, vmax = 5, extent = [MinX, MaxX, MinY, MaxY])
+            plot7.scatter(MinX+dx*np.array(full_coords[num])[:,0], MinY+dy*np.array(full_coords[num])[:,1], c = "black", alpha = 0.5, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+            
+        canvas = FigureCanvasTkAgg(fig7, master=ws)
+        canvas.draw()
+        canvas.get_tk_widget().place(x = 20, y = 100)
         
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:SelectSub(fig7))
+        Interactive_btn.place(x = 20, y = 470)
+
+    
     def get_phys_coords(full_coords, contr, name):
         global phys_coords
         phys_coords = full_coords.copy()
@@ -5992,11 +6369,6 @@ elif selected_index == 1:
             
             full_coords2.append(new_coords2)
         
-        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
-        grid_lbl.place(x = 970, y = 520)
-        
-        ws.after(2000, destroy_widget, grid_lbl)
-        
         if c == 0:
             global PhysCoord_randbtn
             global base_name10
@@ -6004,6 +6376,11 @@ elif selected_index == 1:
             PhysCoord_randbtn.place(x = col3_px, y = 550)
             base_name10 = Text(ws, height = 1, width = 30)
             base_name10.place(in_ = PhysCoord_randbtn, y = 0, relx = spacing)
+            
+            global Vis_Rand_btn
+            Vis_Rand_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin_val.get(), full_coords2, Plotstr, canvas, Interactive_btn))
+            Vis_Rand_btn.place(in_ = Random_Button, y = 0, relx = spacing)
+            
         else:
             PhysCoord_randbtn.destroy()
             base_name10.destroy()
@@ -6011,7 +6388,11 @@ elif selected_index == 1:
             PhysCoord_randbtn.place(x = col3_px, y = 550)
             base_name10 = Text(ws, height = 1, width = 30)
             base_name10.place(in_ = PhysCoord_randbtn, y = 0, relx = spacing)
-            
+        
+        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
+        grid_lbl.place(in_ = Vis_Rand_btn, y = 0, relx = spacing)
+        ws.after(2000, destroy_widget, grid_lbl)
+        
         global c12
         c12 = 1
         
@@ -6603,10 +6984,12 @@ elif selected_index == 3:
             Enter_xsteps.place(x = col2_px, y = 40)
         
             Label(ws, text = 'Uniform sampling:').place(x = col2_px, y = 70)
+            global Grid_Button
             Grid_Button = Button(ws, text = 'Create Grid', command = lambda:create_grid(Diff, xsteps.get(), contr, c5))
             Grid_Button.place(x = col2_px, y = 100)
     
             Label(ws, text = 'Random sampling:').place(x = col2_px, y = 160)
+            global Random_Button
             Random_Button = Button(ws, text = 'Create Points', command = lambda:create_random(Diff, xsteps.get(), contr, c6))
             Random_Button.place(x = col2_px, y = 190)
             
@@ -6637,7 +7020,6 @@ elif selected_index == 3:
         toolbar = NavigationToolbar2Tk(canvas,pltwin)
         toolbar.update()
         canvas.get_tk_widget().pack()
-
 
     def savefunc(contr, Diff, filenames):
     
@@ -7373,10 +7755,56 @@ elif selected_index == 3:
             base_name7.place(x = col2_px, y = 250)
             PhysCoord_btn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_coords(full_coords, contr, base_name7.get('1.0','end-1c')))
             PhysCoord_btn.place(x = col2_px, y = 280)
-            
+         
+            global Vis_Grid_btn
+            Vis_Grid_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin10_val.get(), full_coords, canvas, Interactive_btn))
+            Vis_Grid_btn.place(in_ = Grid_Button, y = 0, relx = spacing)
+        
+        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
+        grid_lbl.place(in_ = Vis_Grid_btn, y = 0, relx = spacing)
+        
+         
         global c5 
         c5 = 1
+    
+    def vis_grid(num, full_coords, canvas, Interactive_btn):
+        plt.close()
+        canvas.get_tk_widget().destroy()
+        #Plotstr = 'sourced'
+        num = int(num)
+        fig7 = plt.figure(figsize = (4.5,3.5))
+        plot7 = fig7.add_subplot(111)
+        if contr == 'X': 
+            plot7.imshow(Diff[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinZ, MaxZ])
+            plot7.scatter(MinX+dx*np.array(full_coords[num])[:,0], MinZ+dz*np.array(full_coords[num])[:,1], c = "yellow", alpha = 0.8, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+        elif contr == 'Y': 
+            plot7.imshow(Diff[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinY, MaxY, MinZ, MaxZ])
+            plot7.scatter(MinY+dy*np.array(full_coords[num])[:,0], MinZ+dz*np.array(full_coords[num])[:,1], c = "yellow", alpha = 0.8, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+        elif contr == 'Z': 
+            plot7.imshow(Diff[num], origin = "lower", cmap = "gray", vmin = 0, vmax = 1.5, extent = [MinX, MaxX, MinY, MaxY])
+            plot7.scatter(MinX+dx*np.array(full_coords[num])[:,0], MinY+dy*np.array(full_coords[num])[:,1], c = "yellow", alpha = 0.8, s = 4)
+            plot7.set_title("Tracked Shape, Frame "+str(num), fontsize = 8)
+            plot7.set_ylabel("y", fontsize = 9)
+            plot7.set_xlabel("x", fontsize = 9)
+            plot7.tick_params(axis='both', which='major', labelsize=7)
+            
+        canvas = FigureCanvasTkAgg(fig7, master=ws)
+        canvas.draw()
+        canvas.get_tk_widget().place(x = 20, y = 190)
         
+        Interactive_btn.destroy()
+        Interactive_btn = Button(ws, text = 'Interactive plot', command = lambda:InterVis(canvas, fig7))
+        Interactive_btn.place(in_ = vis7_btn, y = 0, relx = spacing)
+
+    
     def get_phys_coords(full_coords, contr, name):
         global phys_coords
         phys_coords = full_coords.copy()
@@ -7451,16 +7879,20 @@ elif selected_index == 3:
             
             full_coords2.append(new_coords2)
         
-        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
-        grid_lbl.place(x = col2_px, y = 220)
-        
-        ws.after(2000, destroy_widget, grid_lbl)
-        
         if c == 0:
             base_name10 = Text(ws, height = 1, width = 30)
             base_name10.place(x = col2_px, y = 250)
             PhysCoord_randbtn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_randcoords(full_coords2, contr, base_name10.get('1.0','end-1c')))
             PhysCoord_randbtn.place(x = col2_px, y = 280)
+            
+            global Vis_Rand_btn
+            Vis_Rand_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin10_val.get(), full_coords2, canvas, Interactive_btn))
+            Vis_Rand_btn.place(in_ = Random_Button, y = 0, relx = spacing)
+        
+        grid_lbl = Label(ws, text = 'Points created!', foreground = 'green')    
+        grid_lbl.place(in_ = Vis_Rand_btn, y = 0, relx = spacing)
+        
+        ws.after(2000, destroy_widget, grid_lbl)
         
         global c6
         c6 = 1
