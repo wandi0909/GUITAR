@@ -4149,7 +4149,7 @@ if selected_index == 0:
             PhysCoord_randbtn = Button(ws, text = 'Get Coordinates', command = lambda:get_phys_randcoords(full_coords2, contr, base_name10.get('1.0','end-1c')))
             PhysCoord_randbtn.place(x = col3_px, y = 610)
         
-            global Vis_Grid_btn
+            global Vis_Rand_btn
             Vis_Rand_btn = Button(ws, text = 'Visualise Points', command = lambda:vis_grid(spin_val.get(), full_coords2, Plotstr, canvas, SubWin_btn))
             Vis_Rand_btn.place(in_ = Random_Button, y = 0, relx = spacing)
 
@@ -9940,3 +9940,4 @@ elif selected_index == 4:
     ws.protocol("WM_DELETE_WINDOW", ws.quit)
     ws.mainloop()
     ws.destroy()
+
